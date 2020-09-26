@@ -23,11 +23,6 @@ class QueryStringHelper
 		return empty($this->string) ? self::DELIMITER : implode(self::DELIMITER, $this->string);
 	}
 
-	public function getControllerName()
-	{
-		return ;
-	}
-
 	private function checkIndex()
 	{
 		foreach ($this->string as $key => $value) {

@@ -8,13 +8,13 @@ class IncludeView
     private $mustache;
     private $fileName;
     private $extension = '.php';
-    private $viewDir = ROOT . '/app/views/';
+    private $viewDirRoot = ROOT . '/app/views/';
 
     public function __construct(string $file)
     {
         $this->mustache = new \Mustache_Engine([
             'partials_loader' => new \Mustache_loader_FileSystemLoader(
-                $this->viewDir,
+                $this->viewDirRoot,
                 array('extension' => $this->extension)
             )
         ]);
@@ -24,7 +24,7 @@ class IncludeView
     public function render(array $params)
     {
         $loader = new \Mustache_loader_FileSystemLoader(
-            $this->viewDir,
+            $this->viewDirRoot,
             array('extension' => $this->extension)
         );
 
@@ -40,7 +40,7 @@ class IncludeView
 
     private function checkFileExist()
     {
-        return file_exists($this->viewDir . $this->fileName . $this->extension);
+        return file_exists($this->viewDirRoot . $this->fileName . $this->extension);
     }
 
 }
