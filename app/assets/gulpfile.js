@@ -5,12 +5,10 @@ const soursemaps            = require('gulp-sourcemaps');
 const concat                = require('gulp-concat');
 const clean                 = require('gulp-clean-dir');
 const browserSync           = require('browser-sync').create();
+const svgSprite             = require('gulp-svg-sprite');
 
 /* Styles sass */
-const sass                  = require('gulp-sass');
-const autoprefixer          = require('gulp-autoprefixer');
-const cleanCss              = require('gulp-clean-css');
-const urlAdjuster           = require('gulp-css-url-adjuster');
+const style = require('./tasks/style.js');
 
 /* Page HTML */
 const pug                   = require('gulp-pug');
@@ -19,7 +17,7 @@ const pug                   = require('gulp-pug');
 const lint                  = require('gulp-eslint');
 const babel                 = require('gulp-babel');
 
-sass.compiler = require('node-sass');
+
 
 function pages() {
     return src('./src/pages/index.pug')
@@ -29,22 +27,36 @@ function pages() {
     .pipe(dest('./dist/'))
 }
 
-function style() {
-    return src('./src/scss/style.scss')
-        .pipe(soursemaps.init())
-        .pipe(sass())
-        .pipe(autoprefixer({
-           overrideBrowserslist: ['last 10 version'],
-           cascade: false
+function sprite() {
+    return src('./src/images/svg/**.svg')
+        .pipe(svgSprite({
+            mode: {
+                css: { // Activate the «css» mode
+                    render: {
+                        css: true // Activate CSS output (with default options)
+                    }
+                }
+            }
         }))
-        .pipe(cleanCss({ format: 'beautify' }))
-        .pipe(urlAdjuster({
-            replace: ['../images/', '../img/'],
-          }))
-        .pipe(clean('./dist/css/'))
-        .pipe(soursemaps.write())
-        .pipe(dest('./dist/css/'))
+        .pipe(dest('./dist/svg/'))
 }
+
+// function style() {
+//     return src('./src/scss/style.scss')
+//         .pipe(soursemaps.init())
+//         .pipe(sass())
+//         .pipe(autoprefixer({
+//            overrideBrowserslist: ['last 10 version'],
+//            cascade: false
+//         }))
+//         .pipe(cleanCss({ format: 'beautify' }))
+//         .pipe(urlAdjuster({
+//             replace: ['../images/', '../img/'],
+//           }))
+//         .pipe(clean('./dist/css/'))
+//         .pipe(soursemaps.write())
+//         .pipe(dest('./dist/css/'))
+// }
 
 function script() {
     return src([
@@ -79,3 +91,4 @@ function browser(bc) {
 }
  
 exports.default = series(parallel(pages, style, script, resourse), browser);
+exports.svg = sprite;
