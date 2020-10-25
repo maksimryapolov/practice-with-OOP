@@ -1,2 +1,5 @@
 .idea/
 vendor/
+
+app/assets/node_modules/
+app/assets/dist
