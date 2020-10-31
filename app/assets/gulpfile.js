@@ -8,7 +8,7 @@ const browserSync           = require('browser-sync').create();
 const svgSprite             = require('gulp-svg-sprite');
 
 /* Styles sass */
-const style = require('./tasks/style.js');
+const style                 = require('./tasks/style.js');
 
 /* Page HTML */
 const pug                   = require('gulp-pug');
@@ -16,8 +16,6 @@ const pug                   = require('gulp-pug');
 /* Script js */
 const lint                  = require('gulp-eslint');
 const babel                 = require('gulp-babel');
-
-
 
 function pages() {
     return src('./src/pages/index.pug')
@@ -32,31 +30,21 @@ function sprite() {
         .pipe(svgSprite({
             mode: {
                 css: { // Activate the «css» mode
+                    dest: '.',
                     render: {
-                        css: true // Activate CSS output (with default options)
+                        scss: {} 
                     }
                 }
             }
         }))
-        .pipe(dest('./dist/svg/'))
+        .pipe(debug())
+        .pipe(dest('./src/scss/sprites/'))
 }
 
-// function style() {
-//     return src('./src/scss/style.scss')
-//         .pipe(soursemaps.init())
-//         .pipe(sass())
-//         .pipe(autoprefixer({
-//            overrideBrowserslist: ['last 10 version'],
-//            cascade: false
-//         }))
-//         .pipe(cleanCss({ format: 'beautify' }))
-//         .pipe(urlAdjuster({
-//             replace: ['../images/', '../img/'],
-//           }))
-//         .pipe(clean('./dist/css/'))
-//         .pipe(soursemaps.write())
-//         .pipe(dest('./dist/css/'))
-// }
+function svg() {
+    return src('./src/scss/sprites/svg/*.svg')
+        .pipe(dest('./dist/svg/'))
+}
 
 function script() {
     return src([
@@ -73,9 +61,14 @@ function script() {
     .pipe(dest('./dist/js/'));
 }
 
-function resourse() {
-    return src('./src/images/**/*.*')
+function resource() {
+    return src('./src/images/**/*.{png,jpg,jpeg}')
     .pipe(dest('./dist/img/'));
+}
+
+function fonts() {
+    return src('./src/fonts/*.*')
+        .pipe(dest('./dist/fonts/'));
 }
 
 function browser(bc) {
@@ -90,5 +83,4 @@ function browser(bc) {
     return bc();
 }
  
-exports.default = series(parallel(pages, style, script, resourse), browser);
-exports.svg = sprite;
+exports.default = series(sprite, svg, parallel(pages, style, script, resource, fonts), browser);

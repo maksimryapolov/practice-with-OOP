@@ -23,6 +23,9 @@ module.exports = function () {
         .pipe($.cssUrlAdjuster({
             replace: ['../images/', '../img/'],
         }))
+        .pipe($.cssUrlAdjuster({
+            replace: ['svg/', '../svg/'],
+        }))
         .pipe($.cleanDir('./dist/css/'))
         .pipe($.sourcemaps.write())
         .pipe(dest('./dist/css/'))
