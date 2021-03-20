@@ -3,37 +3,67 @@
 namespace App\Components\Router\Helpers;
 
 /**
-* Класс преобразования URI строки и смотрит есть ли index.php|html в пути
+* Класс преобразования URI в строку формата catalog/id без index.[php|html]
 */
 class QueryStringHelper
 {
-	private const LIMIT = 2;
-	private const DELIMITER = '/';
+    /**
+     * @var string
+     */
 	private $string;
+    /**
+     * @var string
+     */
+	private $requesUri;
 
+    private const LIMIT = 2;
+    private const DELIMITER = '/';
+
+    /**
+     * QueryStringHelper constructor.
+     * @param string $requesUri
+     */
+	public function __construct(string $requesUri)
+    {
+        $this->requesUri = $requesUri;
+    }
+
+    /**
+     * @param string $requesUri
+     * @return string
+     */
 	public function parseString()
-	{
-		$this->string = array_filter(explode(self::DELIMITER, $_SERVER['REQUEST_URI']));
-		$this->checkIndex();
+    {
+        $this->string = $this->pathInArr();
+        $this->checkIndex();
 
-		if(count($this->string) >= self::LIMIT) {
-			return implode(self::DELIMITER, $this->string);
-		}
+        if(count($this->string) >= self::LIMIT) {
+            return implode(self::DELIMITER, $this->string);
+        }
 
-		return empty($this->string) ? self::DELIMITER : implode(self::DELIMITER, $this->string);
-	}
+        return empty($this->string) ? self::DELIMITER : implode(self::DELIMITER, $this->string);
+    }
 
-	private function checkIndex()
+    /**
+     * Преобразует строку запроса в массив
+     *
+     * @return false|string[]
+     *
+     */
+    private function pathInArr()
+    {
+        return array_filter(explode(self::DELIMITER, $this->requesUri));
+    }
+
+    /**
+     * Игнорирует в строке запроса index.[php|html]
+     */
+    private function checkIndex()
 	{
 		foreach ($this->string as $key => $value) {
 			if(preg_match('/index.(html|php)$/', $value)) {
 				unset($this->string[$key]);
 			}
 		}
-	}
-
-	public function setNames()
-	{
-
 	}
 }

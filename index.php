@@ -10,11 +10,9 @@ ini_set('display_startup_errors', 1);
 use App\Routes\Routes;
 use App\Components\Router\Router;
 
-/**
-* Использовать Router как фасад, для определения контроллера исходя из URI
-*/
 $router = new Router(Routes::getRoutes());
 
 include_once ROOT . '/app/bootstrap/functions.php';
 
+$router->init();
 $router->run();

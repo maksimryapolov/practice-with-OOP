@@ -8,14 +8,17 @@ class InstallController
 	private $method;
 	private $params;
 
+	const DF_NAMESPACE_CONTROLLER = "App\\Controllers\\";
+
 	public function install($routes, $path) 
 	{
 		if(!empty($routes)) {
 			foreach ($routes as $key => $value) {
 				if(preg_match("~^$key$~", $path)) {
 					$data = explode('@', $value);
-					$this->controller = "App\\Controllers\\" . ucfirst(array_shift($data)) . 'Controller';
-					$this->method = 'Action' . ucfirst(array_shift($data));
+
+					$this->setNameController(self::DF_NAMESPACE_CONTROLLER . ucfirst(array_shift($data)) . 'Controller');
+					$this->setNameMethod('Action' . ucfirst(array_shift($data)));
 
 					if (preg_replace("~^$key$~", "$1", $path)) {
 						$this->params = preg_replace("~^$key$~", "$1", $path);
@@ -25,14 +28,33 @@ class InstallController
 		}
 	}
 
+	public function setNameController($name)
+	{
+		if($name) {
+			$this->controller = $name;
+		}
+	}
+
 	public function getNameController()
 	{
 		return $this->controller;
 	}
 
+	public function setNameMethod($name)
+	{
+		if($name) {
+			$this->method = $name;
+		}
+	}
+
 	public function getNameMethod()
 	{
 		return $this->method;
+	}
+
+	public function setParams()
+	{
+		//
 	}
 
 	public function getParams()
