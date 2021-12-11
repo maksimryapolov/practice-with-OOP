@@ -23,5 +23,4 @@ class QueryStringHelperTest extends TestCase
             'page section with item'         => ['menu/123','/menu/123']
         ];
     }
-
 }

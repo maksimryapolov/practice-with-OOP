@@ -1,0 +1,85 @@
+/* images */
+@mixin img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+  
+@mixin cover($path: "") {
+    background-image: url($path);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+/* ! images */
+
+// reset buttons
+@mixin resetbutton($padding: 0) {
+    width: auto;
+    margin: 0;
+    border: none;
+    padding: $padding;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    outline: none;
+}
+
+@mixin font-face($font-family, $file-path, $weight: normal, $style: normal) {
+    @font-face {
+        font-family: $font-family;
+        font-weight: $weight;
+        font-style: $style;
+        src: url("#{$file-path}.eot");
+        src: url("#{$file-path}.eot?#iefix") format("embedded-opentype"), url('#{$file-path}.woff') format('woff'), url('#{$file-path}.ttf') format('truetype');
+    }
+}
+
+%custom-container {
+    max-width: $container;
+    margin: 0 auto;
+}
+
+@mixin custom-container {
+    @include container-full();
+    @extend %custom-container;
+}
+
+@mixin custom-container-half {
+    @include container-full();
+    @extend %custom-container;
+    max-width: $container/2;
+}
+
+@mixin body {
+    @include montserrat;
+    font-size: $base-font-size;
+    font-weight: $fw-regular;
+    font-style: normal;
+}
+
+@mixin resetLink {
+    color: $black;
+    text-decoration: none;
+}
+
+@mixin montserrat {
+    font-family: "Montserrat", sans-serif;
+}
+
+@mixin vcenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin transform-liner($property: "", $duration: $base-duration) {
+    transition-property: $property;
+    transition-duration: $duration;
+    transition-timing-function: linear;
+}
+
+@mixin d-none {
+    display: none;
+}

@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Classes\DB;
+
 class IncludeView
 {
     private $mustache;
@@ -9,6 +11,10 @@ class IncludeView
     private $extension = '.php';
     private $viewDirRoot = ROOT . '/app/views/';
 
+    /**
+     * IncludeView constructor.
+     * @param string $file
+     */
     public function __construct(string $file)
     {
         $this->mustache = new \Mustache_Engine([
@@ -20,12 +26,17 @@ class IncludeView
         $this->fileName = $file;
     }
 
+    /**
+     * @param array $params
+     */
     public function render(array $params)
     {
         $loader = new \Mustache_loader_FileSystemLoader(
             $this->viewDirRoot,
             array('extension' => $this->extension)
         );
+
+        (new DB);
 
         if($this->checkFileExist()) {
             $tmpl = $loader->load($this->fileName);
@@ -37,6 +48,9 @@ class IncludeView
         }
     }
 
+    /**
+     * @return bool
+     */
     private function checkFileExist()
     {
         return file_exists($this->viewDirRoot . $this->fileName . $this->extension);

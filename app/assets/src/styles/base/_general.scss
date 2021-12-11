@@ -1,0 +1,56 @@
+h1, h2, h3, h4, h5, h6, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/*
+.container {
+    @include container();
+    @include sm(max-width, rem(510));
+    @include md(max-width, rem(690));
+    @include lg(max-width, rem(930));
+    @include xl(max-width, rem(1110));
+}
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    @include body;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    
+    li {
+        list-style: none;
+    }
+}
+
+a {
+    @include resetLink;
+    color: inherit;
+}
+
+.section-inner {
+    @include custom-container;
+}
+
+.section-inner_half {
+    @include custom-container-half;
+}
+
+.base-hover-link {
+    @include transform-liner("color");
+
+    &:hover {
+        color: $orange;
+    }
+}
+
+.d-none {
+    @include d-none;
+}

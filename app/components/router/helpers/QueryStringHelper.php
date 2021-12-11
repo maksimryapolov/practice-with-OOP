@@ -16,7 +16,14 @@ class QueryStringHelper
      */
 	private $requesUri;
 
+    /**
+     * @var int
+     */
     private const LIMIT = 2;
+
+    /**
+     * @var string
+     */
     private const DELIMITER = '/';
 
     /**

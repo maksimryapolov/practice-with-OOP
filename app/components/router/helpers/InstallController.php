@@ -28,6 +28,9 @@ class InstallController
 		}
 	}
 
+    /**
+     * @param $name
+     */
 	public function setNameController($name)
 	{
 		if($name) {
