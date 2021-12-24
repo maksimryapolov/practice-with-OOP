@@ -35,7 +35,8 @@ class CreateTableUsers extends AbstractMigration
         $users->addColumn('username', 'string', ['limit' => 20])
             ->addColumn('password', 'string', ['limit' => 40])
             ->addColumn('email', 'string', ['limit' => 100])
-            ->addIndex(['username', 'email'], ['unique' => true])
+            ->addIndex(['username'], ['unique' => true])
+            ->addIndex(["email"], ['unique' => true])
             ->create();
     }
 }

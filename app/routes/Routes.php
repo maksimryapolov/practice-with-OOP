@@ -8,7 +8,7 @@ class Routes
 		return array(
 			'/' => 'home@index',
 
-            "sign_up" => "user@add",
+            "sign_up" => "user@register",
 			"user/register" => "user@register",
 
 			'menu' => 'menu@index',

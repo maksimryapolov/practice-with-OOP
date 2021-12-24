@@ -2,23 +2,56 @@
 
 namespace App\controllers;
 
-use Respect\Validation\Validator as v;
+use App\classes\Validate\VadlidateEmail;
+use App\classes\Validate\ValidateLogin;
+use App\classes\Validate\ValidatePassword;
+use App\Models\User;
 
 class UserController
 {
 
     public function ActionRegister()
     {
-        view('user/register', []);
-    }
+        $data = [
+            "ERROR" => false,
+            "RESULT" => false
+        ];
 
-    public function ActionAdd()
-    {
-        echo '<pre>';
-        var_dump($_POST);
-        // var_dump(v::email()->validate());
-        echo '</pre>';
+        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"]) {
 
-        die("ActionRegister");
+            $vLogin = new ValidateLogin($_POST["LOGIN"]);
+            if(!$vLogin->check()) {
+                $data["ERROR"]["LOGIN"] = $vLogin->getError();
+            }
+
+            $vEmail = new VadlidateEmail($_POST["EMAIL"]);
+            if(!$vEmail->check()) {
+                $data["ERROR"]["EMAIL"] = $vEmail->getError();
+            }
+
+            $vPass = new ValidatePassword($_POST["PASSWORD"]);
+            if(!$vPass->check()) {
+                $data["ERROR"]["PASSWORD"] = $vPass->getError();
+            }
+
+            if(!isset($data["ERROR"]["EMAIL"]) &&
+                !$data["ERROR"]["EMAIL"] &&
+                User::checkUserByEmail($_POST["EMAIL"])
+            ) {
+               $data["ERROR"]["EMAIL"] = User::checkUserByEmail($_POST["EMAIL"]);
+            }
+
+            if(empty($data["ERROR"]) && !$data["ERROR"]) {
+                $user = new User;
+                $data["RESULT"] = $user->create([
+                    "name" => $_POST["LOGIN"],
+                    "password" => $_POST["PASSWORD"],
+                    "email" => $_POST["EMAIL"]
+                ]);
+            }
+        }
+
+        view('user/register', $data);
+        return true;
     }
 }
