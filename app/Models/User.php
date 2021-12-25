@@ -15,6 +15,10 @@ class User
         $db = (new DB)->getConnection();
         $query = "INSERT INTO `users` (`username`, `password`, `email`) VALUES (:username, :password, :email)";
 
+        $data["password"] = password_hash($data["password"], PASSWORD_BCRYPT);
+
+        // для авторизации password_verify
+        
         $st = $db->prepare($query);
         $st->bindParam(":username", $data["name"]);
         $st->bindParam(":password", $data["password"]);
