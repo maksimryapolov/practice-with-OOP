@@ -10,6 +10,20 @@ use App\Models\User;
 class UserController
 {
 
+    private static $authTextSuccess = "Вы успешно авторизовались!";
+
+    /**
+     * @return bool
+     */
+    private function checkAuthentication()
+    {
+        if(USER::isAuth()) {
+            header("Location: /");
+            exit();
+        }
+        return true;
+    }
+
     public function ActionRegister()
     {
         $data = [
@@ -17,7 +31,9 @@ class UserController
             "RESULT" => false
         ];
 
-        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"]) {
+        $this->checkAuthentication();
+
+        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"] && !USER::isAuth()) {
 
             $vLogin = new ValidateLogin($_POST["LOGIN"]);
             if(!$vLogin->check()) {
@@ -62,26 +78,37 @@ class UserController
             "ERROR" => false
         ];
 
-
         $login = !empty($_POST["LOGIN"]) ? trim($_POST["LOGIN"]) : "";
         $password = !empty($_POST["PASSWORD"]) ? trim($_POST["PASSWORD"]) : "";
         $user = new User();
 
-        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"] && !isset($_SESSION["USER_AUTH"])) {
+        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"]) {
             $userData = null;
 
             if($user->checkUserData(["login" => $login, "password" => $password])) {
                 $_SESSION["USER_AUTH"] = $user->getUserID();
-            } else { // TODO: Убрать блок else
+            } else {
+                // TODO: Убрать блок else
                 $data["ERROR"] = "Неверный логин или пароль";
             }
         }
 
-        if($user->isAuth()) {
-            $data["RESULT"] = "Вы успешно авторизовались!";
+        if(User::isAuth()) {
+            $data["RESULT"] = self::$authTextSuccess;
         }
 
         view('user/auth', $data);
+        return true;
+    }
+
+    public function ActionLogout()
+    {
+        if(User::isAuth()) {
+            unset($_SESSION["USER_AUTH"]);
+            header("Location: /");
+            exit;
+        }
+
         return true;
     }
 }

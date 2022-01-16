@@ -12,6 +12,7 @@ class Routes
             "sign_up" => "user@register",
 			"user/register" => "user@register",
             "user/auth" => "user@auth",
+            "user/logout" => "user@logout",
             /* !user */
 
 			'menu' => 'menu@index',

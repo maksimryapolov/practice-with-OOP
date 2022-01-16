@@ -58,11 +58,15 @@ class User
     /**
      * @return bool
      */
-    public function isAuth()
+    public static function isAuth()
     {
         return isset($_SESSION["USER_AUTH"]) && !empty($_SESSION["USER_AUTH"]);
     }
 
+    /**
+     * @param string $email
+     * @return bool|string
+     */
     static public function checkUserByEmail($email)
     {
         if($email) {

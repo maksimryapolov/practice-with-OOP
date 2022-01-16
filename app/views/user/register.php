@@ -47,7 +47,7 @@
                 {{#RESULT}}
                 <div class="">
                     <div class="alert alert-info" role="alert">
-                        Вы успешно зарегестрировались!
+                        {{RESULT}}
                     </div>
                     <a class="btn btn-link" href="/user/auth/">
                         Авторизация
