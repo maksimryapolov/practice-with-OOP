@@ -9,7 +9,12 @@ class User
     private $userName;
     private $password;
     private $email;
+    private $userID;
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public function create($data)
     {
         $db = (new DB)->getConnection();
@@ -17,8 +22,6 @@ class User
 
         $data["password"] = password_hash($data["password"], PASSWORD_BCRYPT);
 
-        // для авторизации password_verify
-        
         $st = $db->prepare($query);
         $st->bindParam(":username", $data["name"]);
         $st->bindParam(":password", $data["password"]);
@@ -27,6 +30,37 @@ class User
         $result = $st->execute();
 
         return $result;
+    }
+
+
+    /**
+     * @param array $data
+     * @return bool|mixed
+     */
+    public function checkUserData(array $data)
+    {
+        $db = (new DB)->getConnection();
+        $query = "SELECT * FROM `users` WHERE email = :name OR username = :name";
+        $st = $db->prepare($query);
+        $st->bindParam(":name", $data['login']);
+
+        $st->execute();
+        $result = $st->fetch();
+
+        if($result) {
+            $this->setUserData($result);
+            $result = password_verify($data["password"], $this->getUserPassword());
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuth()
+    {
+        return isset($_SESSION["USER_AUTH"]) && !empty($_SESSION["USER_AUTH"]);
     }
 
     static public function checkUserByEmail($email)
@@ -43,10 +77,54 @@ class User
             $result = (int)$st->fetch()[$key];
 
             if($result > 0) {
-                return "Пользователь с такой почтой уже существует";
+                return "Другую почту, такая есть!";
             }
 
             return false;
         }
     }
+
+    /**
+     * @param array $data
+     */
+    private function setUserData($data)
+    {
+        $this->userID = $data["id"];
+        $this->userName = $data["username"];
+        $this->email = $data["email"];
+        $this->password = $data["password"];
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserPassword()
+    {
+        return $this->password;
+    }
+
+    /*
+     * @return number
+     */
+    public function getUserID()
+    {
+        return $this->userID;
+    }
+
 }

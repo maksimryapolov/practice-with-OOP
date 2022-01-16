@@ -54,4 +54,34 @@ class UserController
         view('user/register', $data);
         return true;
     }
+
+    public function ActionAuth()
+    {
+        $data = [
+            "RESULT" => false,
+            "ERROR" => false
+        ];
+
+
+        $login = !empty($_POST["LOGIN"]) ? trim($_POST["LOGIN"]) : "";
+        $password = !empty($_POST["PASSWORD"]) ? trim($_POST["PASSWORD"]) : "";
+        $user = new User();
+
+        if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"] && !isset($_SESSION["USER_AUTH"])) {
+            $userData = null;
+
+            if($user->checkUserData(["login" => $login, "password" => $password])) {
+                $_SESSION["USER_AUTH"] = $user->getUserID();
+            } else { // TODO: Убрать блок else
+                $data["ERROR"] = "Неверный логин или пароль";
+            }
+        }
+
+        if($user->isAuth()) {
+            $data["RESULT"] = "Вы успешно авторизовались!";
+        }
+
+        view('user/auth', $data);
+        return true;
+    }
 }

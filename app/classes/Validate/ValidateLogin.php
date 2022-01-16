@@ -16,7 +16,7 @@ class ValidateLogin extends MainValidate
      */
     protected $nameParam = "Логин";
     protected $input;
-    protected $descError = "должен содержать минимум #LENGTH# символа";
+    protected $descError = "должен содержать минимум #LENGTH# символа"; // echo definesEnding(631, array('символ', 'символа', 'символов'));
 
     /**
      * @var int

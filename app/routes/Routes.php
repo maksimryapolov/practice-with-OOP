@@ -8,8 +8,11 @@ class Routes
 		return array(
 			'/' => 'home@index',
 
+            /* user */
             "sign_up" => "user@register",
 			"user/register" => "user@register",
+            "user/auth" => "user@auth",
+            /* !user */
 
 			'menu' => 'menu@index',
 			'menu\/(\S+\D+)' => 'menu@categoty',
