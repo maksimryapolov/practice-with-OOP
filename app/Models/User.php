@@ -63,6 +63,18 @@ class User
         return isset($_SESSION["USER_AUTH"]) && !empty($_SESSION["USER_AUTH"]);
     }
 
+    public function getUserById(int $ID)
+    {
+        $db = (new DB())->getConnection();
+        $query = "SELECT * FROM `users` WHERE id=:id ";
+        $st = $db->prepare($query);
+        $st->bindParam(":id", $ID);
+        $res = $st->execute();
+        echo '<pre>';
+        var_dump($res->fetch());
+        echo '</pre>';
+    }
+
     /**
      * @param string $email
      * @return bool|string
@@ -86,6 +98,18 @@ class User
 
             return false;
         }
+    }
+
+    /**
+     * @return bool|string|integer
+     */
+    public static function getCurUserID()
+    {
+        if(self::isAuth()) {
+            return $_SESSION["USER_AUTH"];
+        }
+
+        return false;
     }
 
     /**

@@ -5,6 +5,8 @@ use App\Classes\IncludeView;
 function view(string $file, array $params = [])
 {
     $view = new IncludeView($file);
+    $baseParams = [];
+    $params = array_merge($baseParams, $params);
     $view->render($params);
 }
 
