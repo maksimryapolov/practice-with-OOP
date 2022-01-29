@@ -65,14 +65,21 @@ class User
 
     public function getUserById(int $ID)
     {
+        $res = [];
+
         $db = (new DB())->getConnection();
         $query = "SELECT * FROM `users` WHERE id=:id ";
         $st = $db->prepare($query);
         $st->bindParam(":id", $ID);
-        $res = $st->execute();
-        echo '<pre>';
-        var_dump($res->fetch());
-        echo '</pre>';
+        $st->execute();
+        $result = $st->fetch();
+
+        if($result) {
+            $this->setUserData($result);
+        }
+
+        return $result;
+
     }
 
     /**

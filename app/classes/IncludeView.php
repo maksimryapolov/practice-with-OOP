@@ -2,8 +2,6 @@
 
 namespace App\Classes;
 
-use App\Classes\DB;
-
 class IncludeView
 {
     private $mustache;

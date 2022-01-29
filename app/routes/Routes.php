@@ -13,6 +13,7 @@ class Routes
 			"user/register" => "user@register",
             "user/auth" => "user@auth",
             "user/logout" => "user@logout",
+            "user/personal" => "user@profile",
             /* !user */
 
 			'menu' => 'menu@index',

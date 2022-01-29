@@ -101,6 +101,25 @@ class UserController
         return true;
     }
 
+    public function ActionProfile()
+    {
+        $userId = User::getCurUserID();
+        if(!empty($userId) && $userId) {
+            $userData = null;
+            $user = new User();
+            $user->getUserById($userId);
+
+            view("user/personal", [
+                "name" => $user->getUserName(),
+                "email" => $user->getUserEmail()
+            ]);
+            return true;
+        }
+
+        header("Location: user/auth");
+    }
+
+
     public function ActionLogout()
     {
         if(User::isAuth()) {

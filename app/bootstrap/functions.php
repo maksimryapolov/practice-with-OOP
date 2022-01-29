@@ -1,12 +1,20 @@
 <?php
 
 use App\Classes\IncludeView;
+use App\components\config\BaseParams;
 
+/**
+ * Подключается вид и передает параметры в шаблон
+ *
+ * @param string $file
+ * @param array $params
+ */
 function view(string $file, array $params = [])
 {
     $view = new IncludeView($file);
-    $baseParams = [];
-    $params = array_merge($baseParams, $params);
+    $baseParams = new BaseParams();
+    $params = array_merge($baseParams->getParams(), $params);
+
     $view->render($params);
 }
 
