@@ -101,6 +101,18 @@ class UserController
         return true;
     }
 
+    public function ActionDelete()
+    {
+        if(User::isAuth()) {
+            $user = new User;
+            $userID = User::getCurUserID();
+            $user->deleteById($userID);
+            unset($_SESSION["USER_AUTH"]);
+            header("Location: /");
+        }
+        die("Пользователь не найден");
+    }
+
     public function ActionProfile()
     {
         $userId = User::getCurUserID();
@@ -108,11 +120,46 @@ class UserController
             $userData = null;
             $user = new User();
             $user->getUserById($userId);
-
-            view("user/personal", [
+            $params = [
                 "name" => $user->getUserName(),
-                "email" => $user->getUserEmail()
-            ]);
+                "email" => $user->getUserEmail(),
+            ];
+
+            if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"]) {
+                $data = [
+                    "RESULT" => false,
+                    "ERROR" => false
+                ];
+
+                $vEmail = new VadlidateEmail($_POST["EMAIL"]);
+                if(!$vEmail->check()) {
+                    $data["ERROR"]["EMAIL"] = $vEmail->getError();
+                }
+
+                if($_POST["PASSWORD"] !== $_POST["CONFIRM_PASSWORD"]) {
+                    $data["ERROR"]["CONFIRM_PASSWORD"] = "Ошибка подтверждения пароля";
+                }
+
+                if(!isset($data["ERROR"]["EMAIL"]) &&
+                    !$data["ERROR"]["EMAIL"] &&
+                    User::checkUserByEmail($_POST["EMAIL"])
+                ) {
+                    $data["ERROR"]["EMAIL"] = User::checkUserByEmail($_POST["EMAIL"]);
+                }
+
+                if(empty($data["ERROR"]) && !$data["ERROR"]) {
+                    $data["RESULT"] = $user->update([
+                        "id" => $userId,
+                        "password" => $_POST["PASSWORD"],
+                        "email" => $_POST["EMAIL"]
+                    ]);
+                }
+
+                $params["RESULT"] = $data["RESULT"];
+                $params["ERROR"] = $data["ERROR"];
+            }
+
+            view("user/personal", $params);
             return true;
         }
 

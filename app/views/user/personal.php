@@ -5,15 +5,12 @@
         <div class="col-12">
             <div class="text-center mt-5">
                 <h1 class="display-4 mb-2">Личный кабинет</h1>
-                {{#ERROR}}
-                <div class="d-flex justify-content-center">
-                    <div class="alert alert-danger w-50" role="alert">
-                        {{ERROR}}
+                {{#RESULT}}
+                    <div class="alert alert-info" role="alert">
+                        Данные обновлены
                     </div>
-                </div>
-                {{/ERROR}}
-                {{^RESULT}}
-                <form action="/user/auth" class="" method="POST">
+                {{/RESULT}}
+                <form action="/user/personal" class="" method="POST">
                     <input type="hidden" name="register" value="Y">
                     <div class="d-flex flex-column align-items-center">
                         <div class="card-title">
@@ -24,19 +21,41 @@
                     </div>
                     <div class="d-flex flex-column align-items-center">
                         {{#ERROR}}
-                        {{#PASSWORD}}
-                        <span class="text-danger mb-2">{{PASSWORD}}</span>
-                        {{/PASSWORD}}
+                            {{#EMAIL}}
+                                <span class="text-danger mb-2">{{EMAIL}}</span>
+                            {{/EMAIL}}
                         {{/ERROR}}
                         <label for="">
-                            <input class="form-control mb-2" placeholder="Пароль" type="text" name="PASSWORD" value={{email}}>
+                            <input class="form-control mb-2" placeholder="Email" type="text" name="EMAIL" value={{email}}>
+                        </label>
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        {{#ERROR}}
+                            {{#PASSWORD}}
+                                <span class="text-danger mb-2">{{PASSWORD}}</span>
+                            {{/PASSWORD}}
+                        {{/ERROR}}
+                        <label for="">
+                            <input class="form-control mb-2" placeholder="Новый пароль" type="password" name="PASSWORD" value="">
+                        </label>
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        {{#ERROR}}
+                            {{#CONFIRM_PASSWORD}}
+                                <span class="text-danger mb-2">{{CONFIRM_PASSWORD}}</span>
+                            {{/CONFIRM_PASSWORD}}
+                        {{/ERROR}}
+                        <label for="">
+                            <input class="form-control mb-2" placeholder="Подтвердите пароль" type="password" name="CONFIRM_PASSWORD" value="">
                         </label>
                     </div>
                     <div class="form-group">
                         <input type="submit" name="SUBMIT" class="btn btn-primary" value="Отправить">
                     </div>
+                    <div class="form-group mt-3">
+                        <a href="/user/delete" class="btn btn-danger">Удалить аккаунт</a>
+                    </div>
                 </form>
-                {{/RESULT}}
             </div>
         </div>
     </div>

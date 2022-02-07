@@ -45,14 +45,14 @@
                 {{/RESULT}}
 
                 {{#RESULT}}
-                <div class="">
-                    <div class="alert alert-info" role="alert">
-                        {{RESULT}}
+                    <div class="">
+                        <div class="alert alert-info" role="alert">
+                            {{RESULT}}
+                        </div>
+                        <a class="btn btn-link" href="/user/auth/">
+                            Авторизация
+                        </a>
                     </div>
-                    <a class="btn btn-link" href="/user/auth/">
-                        Авторизация
-                    </a>
-                </div>
                 {{/RESULT}}
             </div>
         </div>

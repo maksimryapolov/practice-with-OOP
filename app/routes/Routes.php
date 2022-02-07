@@ -14,6 +14,7 @@ class Routes
             "user/auth" => "user@auth",
             "user/logout" => "user@logout",
             "user/personal" => "user@profile",
+            "user/delete" => "user@delete",
             /* !user */
 
 			'menu' => 'menu@index',

@@ -32,6 +32,38 @@ class User
         return $result;
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function update($data)
+    {
+
+        $db = (new DB)->getConnection();
+        $query = "UPDATE `users` SET `email` = :email";
+
+        if(!empty($data["PASSWORD"]) && $data["PASSWORD"]) {
+            $query .= ", `passwod` = :password";
+        }
+
+        $query .= " WHERE `id` = :id";
+
+        $data["password"] = password_hash($data["password"], PASSWORD_BCRYPT);
+
+        $st = $db->prepare($query);
+        $st->bindParam(":id", $data["id"]);
+        $st->bindParam(":email", $data["email"]);
+
+        if(!empty($data["PASSWORD"]) && $data["PASSWORD"]) {
+            $data["password"] = password_hash($data["password"], PASSWORD_BCRYPT);
+            $st->bindParam(":password", $data["password"]);
+        }
+
+        $result = $st->execute();
+
+        return $result;
+    }
+
 
     /**
      * @param array $data
@@ -105,6 +137,21 @@ class User
 
             return false;
         }
+    }
+
+    /**
+     * @param int $id
+     */
+    public function deleteById(int $id)
+    {
+        $id = (int)$id;
+
+        $db = (new DB)->getConnection();
+        $query = "DELETE FROM `users` WHERE id=:id";
+
+        $st = $db->prepare($query);
+        $st->bindParam(":id", $id);
+        return $st->execute();
     }
 
     /**
