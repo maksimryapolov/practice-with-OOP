@@ -17,6 +17,7 @@ class User
      */
     public function create($data)
     {
+        $result = [];
         $db = (new DB)->getConnection();
         $query = "INSERT INTO `users` (`username`, `password`, `email`) VALUES (:username, :password, :email)";
 
@@ -27,7 +28,10 @@ class User
         $st->bindParam(":password", $data["password"]);
         $st->bindParam(":email", $data["email"]);
 
-        $result = $st->execute();
+        if($st->execute()) {
+            $result["status"] = "success";
+            $result["id"] = $db->lastInsertId();
+        }
 
         return $result;
     }

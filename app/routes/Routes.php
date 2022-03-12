@@ -17,6 +17,9 @@ class Routes
             "user/delete" => "user@delete",
             /* !user */
 
+            "api/user/register" => "userAPI@register",
+            "api/user/auth" => "userAPI@auth",
+
 			'menu' => 'menu@index',
 			'menu\/(\S+\D+)' => 'menu@categoty',
 			'menu\/(\d+)' => 'menu@item'

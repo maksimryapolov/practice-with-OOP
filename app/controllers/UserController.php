@@ -57,6 +57,7 @@ class UserController
                $data["ERROR"]["EMAIL"] = User::checkUserByEmail($_POST["EMAIL"]);
             }
 
+
             if(empty($data["ERROR"]) && !$data["ERROR"]) {
                 $user = new User;
                 $data["RESULT"] = $user->create([
@@ -81,7 +82,9 @@ class UserController
         $login = !empty($_POST["LOGIN"]) ? trim($_POST["LOGIN"]) : "";
         $password = !empty($_POST["PASSWORD"]) ? trim($_POST["PASSWORD"]) : "";
         $user = new User();
-
+        echo '<pre>';
+        var_dump($_POST);
+        echo '</pre>';
         if(isset($_POST["SUBMIT"]) && $_POST["SUBMIT"]) {
             $userData = null;
 
