@@ -61,6 +61,22 @@ class Token
     }
 
     /**
+     * @param string $token
+     * @return bool
+     */
+    public function delete(string $token) :bool
+    {
+        $db = (new DB)->getConnection();
+
+        $query = "DELETE FROM tokens WHERE refresh=:refresh";
+
+        $st = $db->prepare($query);
+        $st->bindParam(":refresh", $token);
+
+        return $st->execute();
+    }
+
+    /**
      * Метод определяет обновить токен у текущего
      * пользователя или добавить новый
      *

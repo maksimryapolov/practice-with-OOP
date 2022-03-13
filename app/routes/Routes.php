@@ -19,6 +19,7 @@ class Routes
 
             "api/user/register" => "userAPI@register",
             "api/user/login" => "userAPI@auth",
+            "api/user/logout" => "userAPI@logout",
 
 			'menu' => 'menu@index',
 			'menu\/(\S+\D+)' => 'menu@categoty',

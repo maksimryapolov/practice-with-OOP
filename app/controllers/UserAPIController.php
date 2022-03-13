@@ -16,6 +16,7 @@ header("Content-Type: application/json; charset=UTF-8");
 class UserAPIController
 {
     private static $authTextSuccess = "Вы успешно авторизовались!";
+    private static $tokenCookKey = "token";
 
     public function ActionAuth()
     {
@@ -50,7 +51,7 @@ class UserAPIController
                 $data["USER"]["ID"] = $user->getUserID();
                 $data["RESULT"] = self::$authTextSuccess;
 
-                setcookie("token", $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true]);
+                setcookie(self::$tokenCookKey, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true]);
             } else {
                 // TODO: Убрать блок else
                 $data["ERROR"] = "Неверный логин или пароль";
@@ -106,6 +107,19 @@ class UserAPIController
         }
 
         echo json_encode($data);
+        return true;
+    }
+
+    public function ActionLogout()
+    {
+        $refresh = $_COOKIE[self::$tokenCookKey];
+        $token = new Token();
+
+        if($result = $token->delete($refresh)) {
+            setcookie(self::$tokenCookKey, "", time() - 3600);
+        }
+
+        echo json_encode(["status" => $result]);
         return true;
     }
 }
