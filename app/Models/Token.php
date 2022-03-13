@@ -9,67 +9,137 @@ use Firebase\JWT\JWT;
 
 class Token
 {
-    private $token;
+    private $alg = 'HS512';
+    private $signatureRefresh = "REFRESH_TOKEN_HS512";
+    private $signatureAccess = "ACCESS_TOKEN_HS512";
 
-    public function __construct($token)
-    {
-        $this->token = $token;
-    }
-
-    public function save($userID)
+    /**
+     * @param int $userID
+     * @param string $token
+     * @return string
+     */
+    public function save(int $userID, string $token) :string
     {
         $userID = (int)$userID;
-
-        $db = (new DB())->getConnection();
-
-        $result = [];
+        $result = "";
         $db = (new DB)->getConnection();
+
         $query = "INSERT INTO `tokens` (`user_id`, `refresh`) VALUES (:user_id, :refresh)";
 
         $st = $db->prepare($query);
         $st->bindParam(":user_id", $userID);
-        $st->bindParam(":refresh", $this->token);
+        $st->bindParam(":refresh", $token);
 
         if($st->execute()) {
-            $result["status"] = "success";
-            $result["token"] = "$this->token";
+            $result = $token;
+        }
+
+        return $result;
+    }
+    /**
+     * @param int $userID
+     * @param string $token
+     * @return string
+     */
+    public function update(int $userID, string $token) :string
+    {
+        $userID = (int)$userID;
+        $result = "";
+        $db = (new DB)->getConnection();
+
+        $query = "UPDATE tokens SET tokens.refresh = :refresh WHERE user_id=:user_id";
+
+        $st = $db->prepare($query);
+        $st->bindParam(":user_id", $userID);
+        $st->bindParam(":refresh", $token);
+
+        if($st->execute()) {
+            $result = $token;
         }
 
         return $result;
     }
 
-    private $signatureRefresh = "REFRESH_TOKEN_HS512";
-    private $signatureAccess = "ACCESS_TOKEN_HS512";
-    private $alg = 'HS512';
+    /**
+     * Метод определяет обновить токен у текущего
+     * пользователя или добавить новый
+     *
+     * @param int $userID
+     * @param string $token
+     * @return string
+     */
+    public function processingRecord(int $userID, string $token) :string
+    {
+        if($this->checkTokenByUserId($userID)) {
+           return $this->update($userID, $token);
+        }
 
-    public function generateAccess($data)
+        return $this->save($userID, $token);
+    }
+
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    public function checkTokenByUserId(int $userId) :int
+    {
+        $db = (new DB())->getConnection();
+
+        $query = "SELECT COUNT(*) as `COUNT` FROM `tokens` WHERE user_id=:user_id";
+        $st = $db->prepare($query);
+
+        $st->bindParam(":user_id", $userId);
+        $st->execute();
+        $result = $st->fetch();
+
+        return (int)$result['COUNT'] !== 0;
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    public function generateAccess(array $data) :string
     {
         return $this->generateToken($data, $this->signatureAccess);
     }
 
-    public function generateRefresh($data)
+    /**
+     * @param array $data
+     * @return string
+     */
+    public function generateRefresh(array $data) :string
     {
         return $this->generateToken($data, $this->signatureRefresh);
     }
 
-    private function getPayload($data)
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function getPayload(array $data) :array
     {
         /**
          * Полезна нагрузка — это любые данные, которые вы хотите передать в токене
-         * если записать время time() + 3600 (1час)
+         * если записать время time() + 3600 (1час) time()+60*60*24*30
          */
-        $payload = array(
+        return array(
             "iss" => $_SERVER["SERVER_NAME"], // issuer определяет приложение, из которого отправляется токен.
             "iat" => time(), // (issued at) время создания токена
+            "exp" => time()+60*60*24*30,
             "data" => array(
                 "id" => $data["USER"]["ID"],
                 "email" => $data["USER"]["EMAIL"]
             )
         );
-        return $payload;
     }
 
-    private function generateToken($data, $signature)
+    /**
+     * @param array $data
+     * @param string $signature
+     * @return string
+     */
+    private function generateToken(array $data, string $signature) :string
     {
         return JWT::encode(
             $this->getPayload($data),

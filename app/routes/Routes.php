@@ -18,7 +18,7 @@ class Routes
             /* !user */
 
             "api/user/register" => "userAPI@register",
-            "api/user/auth" => "userAPI@auth",
+            "api/user/login" => "userAPI@auth",
 
 			'menu' => 'menu@index',
 			'menu\/(\S+\D+)' => 'menu@categoty',

@@ -19,38 +19,42 @@ class UserAPIController
 
     public function ActionAuth()
     {
-
         $data = [
             "RESULT" => false,
             "ERROR" => false
         ];
 
-        $tst = json_decode(file_get_contents("php://input"));
+        $response = json_decode(file_get_contents("php://input"));
 
-        $login = !empty($tst->LOGIN) ? trim($tst->LOGIN) : "";
-        $password = !empty($tst->PASSWORD) ? trim($tst->PASSWORD) : "";
+        $login = !empty($response->LOGIN) ? trim($response->LOGIN) : "";
+        $password = !empty($response->PASSWORD) ? trim($response->PASSWORD) : "";
         $user = new User();
 
-        if(isset($tst->SUBMIT) && $tst->SUBMIT) {
+        if(isset($response->SUBMIT) && $response->SUBMIT) {
             $userData = null;
 
             if($user->checkUserData(["login" => $login, "password" => $password])) {
-                $_SESSION["USER_AUTH"] = $user->getUserID();
+                $dataPayload = [
+                    "USER" => [
+                        "ID" => $user->getUserID(),
+                        "EMAIL" => $user->getUserEmail()
+                    ],
+                ];
+
+                $token = new Token();
+
+                $data["TOKEN"]["REFRESH"] = $token->processingRecord($user->getUserID(), $token->generateRefresh($dataPayload));
+                $data["TOKEN"]["ACCESS"] = $token->generateAccess($dataPayload);
+
+                $data["USER"]["EMAIL"] = $user->getUserEmail();
+                $data["USER"]["ID"] = $user->getUserID();
+                $data["RESULT"] = self::$authTextSuccess;
+
+                setcookie("token", $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true]);
             } else {
                 // TODO: Убрать блок else
                 $data["ERROR"] = "Неверный логин или пароль";
             }
-        }
-
-        if(User::isAuth()) {
-            $data["USER"]["EMAIL"] = $user->getUserEmail();
-            $data["USER"]["ID"] = $user->getUserID();
-            $data["RESULT"] = self::$authTextSuccess;
-            // $data["USER"]["TOKEN"] = $this->JWTencode($data["USER"], $user->getUserPassword());
-            $token = new Token();
-            echo '<pre>';
-            var_dump($token->encode($data["USER"]));
-            echo '</pre>';
         }
 
         echo json_encode($data);
@@ -98,24 +102,9 @@ class UserAPIController
                     "password" => $response->PASSWORD,
                     "email" => $response->EMAIL
                 ]);
-
-                $datePayload = [
-                    "USER" => [
-                        "ID" => $data["RESULT"]["id"],
-                        "EMAIL" => $response->EMAIL
-                    ],
-                ];
-
-                $token = new Token();
-                $modelToken = new Token($token->generateRefresh($datePayload));
-                $resTokenRefresh = $modelToken->save($data["RESULT"]["id"]);
-
-                $data["RESULT"]["TOKEN"]["REFRESH"] = $resTokenRefresh["token"];
-                $data["RESULT"]["TOKEN"]["ACCEESS"] = $token->generateAccess($datePayload);
-
-                setcookie("token", $data["RESULT"]["TOKEN"]["REFRESH"], ["expires_or_options" => time()+60*60*24*30, "httponly" => true]);
             }
         }
+
         echo json_encode($data);
         return true;
     }
