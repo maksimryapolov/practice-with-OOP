@@ -115,6 +115,10 @@ class Token
         return $result;
     }
 
+    /**
+     * @param string $refresh
+     * @return mixed
+     */
     public function verifyRefresh(string $refresh)
     {
         /**
@@ -122,29 +126,37 @@ class Token
          * $decodedData->exp - Дата срока токена
          */
         $key = new Key($this->signatureRefresh, $this->alg);
-        $decodedData = JWT::decode($refresh, $key);
-        $userId = (int)$decodedData->data->id;
 
-        $dateExpirationToken = $decodedData->exp;
-
-        if($dateExpirationToken < time()) { // decode сам валидирует
-            return [];
+        try {
+            $decodedData = JWT::decode($refresh, $key);
+            $userId = (int)$decodedData->data->id;
+            $tokenFromDb = $this->getTokenByUserId($userId);
+            if($refresh === $tokenFromDb["refresh"]) {
+                return $decodedData->data;
+            }
+            throw new \Exception("Invalid token");
+        } catch (\Exception $exception) {
+            $result["status"] = "fail";
+            $result["message"] = $exception->getMessage();
         }
 
+        return $result;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function getTokenByUserId(int $id)
+    {
         $db = (new DB())->getConnection();
         $query = "SELECT `refresh` FROM `tokens` WHERE user_id=:user_id";
 
         $st = $db->prepare($query);
-        $st->bindParam("user_id", $userId);
+        $st->bindParam("user_id", $id);
 
         $st->execute();
-        $tokenFromDb = $st->fetch();
-
-        if($refresh === $tokenFromDb["refresh"]) {
-            return $decodedData->data;
-        }
-
-        return [];
+        return $st->fetch();
     }
 
     /**

@@ -146,11 +146,6 @@ class User
         }
     }
 
-    static function checkUserByLogin($login)
-    {
-
-    }
-
     /**
      * @param int $id
      */

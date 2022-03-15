@@ -15,6 +15,7 @@ class TokenController extends BaseController
     {
         $keyToken = $this->getContainer()->get('settings')['nameTokenKey'];
         $refresh = $request->getCookieParam($keyToken);
+
         $data = [];
 
         if(!$refresh) {
@@ -24,7 +25,7 @@ class TokenController extends BaseController
         $token = new Token();
         $result = $token->verifyRefresh($refresh);
 
-        if(!empty($result)) {
+        if(!empty($result) && $result['status'] !== "fail") {
             $user = new User;
             $data["USER"] = $user->getUserById($result->id);
 
@@ -35,15 +36,14 @@ class TokenController extends BaseController
                 ],
             ];
 
-            $token = new Token();
-
             $data["TOKEN"]["REFRESH"] = $token->processingRecord($data["USER"]["id"], $token->generateRefresh($dataPayload));
             $data["TOKEN"]["ACCESS"] = $token->generateAccess($dataPayload);
 
-            setcookie($keyToken, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true]);
+            setcookie($keyToken, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true, "path" => "/"]);
             return $response->withJson($data, 200);
         }
 
-        return $response->withJson(["status" => "fail", "message" => "fail validate token"], 200);
+        setcookie($keyToken, "", time() - 3600);
+        return $response->withJson(["status" => "fail", "message" => "Fail validate token"], 401);
     }
 }
