@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Classes\DB;
+use http\Env\Request;
+use http\Env\Response;
 
 class User
 {
@@ -101,7 +103,7 @@ class User
 
     public function getUserById(int $ID)
     {
-        $res = [];
+        $result = [];
 
         $db = (new DB())->getConnection();
         $query = "SELECT * FROM `users` WHERE id=:id ";
@@ -115,32 +117,38 @@ class User
         }
 
         return $result;
-
     }
 
     /**
      * @param string $email
      * @return bool|string
      */
-    static public function checkUserByEmail($email)
+    static public function checkUserByEmail($email="", $login="")
     {
-        if($email) {
+
+        if($email || $login) {
             $key = "COUNT_EMAIL";
 
             $db = (new DB)->getConnection();
-            $query = "SELECT COUNT(*) AS $key FROM `users` WHERE email=:email";
+            $query = "SELECT COUNT(*) AS $key FROM `users` WHERE email=:email OR username=:username";
 
             $st = $db->prepare($query);
             $st->bindParam(":email", $email);
+            $st->bindParam(":username", $login);
             $st->execute();
             $result = (int)$st->fetch()[$key];
 
             if($result > 0) {
-                return "Другую почту, такая есть!";
+                return "Имя пользователя или пароль уже используется";
             }
 
             return false;
         }
+    }
+
+    static function checkUserByLogin($login)
+    {
+
     }
 
     /**
@@ -211,6 +219,21 @@ class User
     public function getUserID()
     {
         return $this->userID;
+    }
+
+    public function getUsersList()
+    {
+        $result = [];
+        $db = (new DB)->getConnection();
+        $query = "SELECT id, username, email FROM `users`";
+        $st = $db->prepare($query);
+        $st->execute();
+
+        while ($user = $st->fetch()) {
+            $result[] = $user;
+        }
+
+        return $result;
     }
 
 }

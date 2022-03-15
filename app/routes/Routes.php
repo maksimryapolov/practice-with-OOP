@@ -8,22 +8,26 @@ class Routes
 		return array(
 			'/' => 'home@index',
 
-            /* user */
+            /* user
             "sign_up" => "user@register",
 			"user/register" => "user@register",
             "user/auth" => "user@auth",
             "user/logout" => "user@logout",
             "user/personal" => "user@profile",
             "user/delete" => "user@delete",
-            /* !user */
+            !user */
 
+            "api/user/refresh" => "userAPI@refresh",
             "api/user/register" => "userAPI@register",
             "api/user/login" => "userAPI@auth",
             "api/user/logout" => "userAPI@logout",
 
-			'menu' => 'menu@index',
+            "api/users" => "usersAPI@index",
+
+
+			/*'menu' => 'menu@index',
 			'menu\/(\S+\D+)' => 'menu@categoty',
-			'menu\/(\d+)' => 'menu@item'
+			'menu\/(\d+)' => 'menu@item'*/
 
 		);
 	}

@@ -1,0 +1,35 @@
+<?php
+
+
+namespace App\middleware;
+
+
+use App\Models\Token;
+use Slim\Http\Request;
+use Slim\Http\Response;
+
+class EnsureTokenIsValid
+{
+    public function run(Request $request, Response $response, $next)
+    {
+        $accessToken = explode(" ", $request->getHeader('HTTP_AUTHORIZATION')[0])[1];
+        $token = new Token();
+
+        if(isset($accessToken) && $accessToken) {
+
+            $userData = $token->verifyAccess($accessToken);
+
+            if($userData["status"] === "success") {
+                return $next($request, $response);
+            }
+
+            $newResponse = $response->withStatus(401)->withJson($userData);
+            $next($request, $newResponse);
+            return $newResponse;
+        }
+
+        $newResponse = $response->withStatus(401)->withJson(["status" => "fail", "message" => "Not authorized"]);
+        $next($request, $newResponse);
+        return $newResponse;
+    }
+}

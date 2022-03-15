@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Classes\DB;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class Token
 {
@@ -94,6 +95,59 @@ class Token
     }
 
     /**
+     * @param string $access
+     * @return array
+     */
+    public function verifyAccess(string $access) :array
+    {
+        $result = [];
+        $key = new Key($this->signatureAccess, $this->alg);
+
+        try {
+            $decodedData = JWT::decode($access, $key);
+            $result["status"] = "success";
+            $result["data"] = $decodedData->data;
+        } catch (\Exception $exception) {
+            $result["status"] = "fail";
+            $result["message"] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function verifyRefresh(string $refresh)
+    {
+        /**
+         * $decodedData->iat - Дата создание токена
+         * $decodedData->exp - Дата срока токена
+         */
+        $key = new Key($this->signatureRefresh, $this->alg);
+        $decodedData = JWT::decode($refresh, $key);
+        $userId = (int)$decodedData->data->id;
+
+        $dateExpirationToken = $decodedData->exp;
+
+        if($dateExpirationToken < time()) { // decode сам валидирует
+            return [];
+        }
+
+        $db = (new DB())->getConnection();
+        $query = "SELECT `refresh` FROM `tokens` WHERE user_id=:user_id";
+
+        $st = $db->prepare($query);
+        $st->bindParam("user_id", $userId);
+
+        $st->execute();
+        $tokenFromDb = $st->fetch();
+
+        if($refresh === $tokenFromDb["refresh"]) {
+            return $decodedData->data;
+        }
+
+        return [];
+    }
+
+    /**
      * @param int $userId
      * @return bool
      */
@@ -117,6 +171,9 @@ class Token
      */
     public function generateAccess(array $data) :string
     {
+        if(empty($data["exp"])) {
+            $data["exp"] = time()+60*15;
+        }
         return $this->generateToken($data, $this->signatureAccess);
     }
 
@@ -126,6 +183,9 @@ class Token
      */
     public function generateRefresh(array $data) :string
     {
+        if(empty($data["exp"])) {
+            $data["exp"] = time()+60*60*24*30;
+        }
         return $this->generateToken($data, $this->signatureRefresh);
     }
 
@@ -142,7 +202,7 @@ class Token
         return array(
             "iss" => $_SERVER["SERVER_NAME"], // issuer определяет приложение, из которого отправляется токен.
             "iat" => time(), // (issued at) время создания токена
-            "exp" => time()+60*60*24*30,
+            "exp" => $data["exp"],
             "data" => array(
                 "id" => $data["USER"]["ID"],
                 "email" => $data["USER"]["EMAIL"]

@@ -4,6 +4,10 @@ namespace App\Components\Router;
 
 use App\Components\Router\Helpers\QueryStringHelper;
 use App\Components\Router\Helpers\InstallController;
+use Slim\App;
+use Slim\Http\Request;
+use Slim\Http\Response;
+
 
 /**
  *
@@ -12,7 +16,17 @@ use App\Components\Router\Helpers\InstallController;
  * Class Router
  * @package App\Components\Router
  */
+class MV
+{
+    public function __invoke($request, $response, $next)
+    {
+        $response->getBody()->write('BEFORE');
+        $response = $next($request, $response);
+        $response->getBody()->write('AFTER');
 
+        return $response;
+    }
+}
 class Router
 {
     /**
@@ -62,13 +76,37 @@ class Router
      */
 	public function run()
 	{
-	    $this->isSetResource();
+        
+        // Create and configure Slim app
+        $config = [
+            'settings' => [
+                'displayErrorDetails' => true,
+                'debug' => true
+            ]
+        ];
+        $app = new App($config);
+
+        // Define app routes
+        $app->get('/api', function (Request $request, Response $response) {
+            $headers = $request->getParams();
+            echo "<pre>";
+            var_dump($headers);
+            echo "</pre>";
+            $name = $request->getAttribute('name');
+            return $response->withStatus(401)->write("Hello " . $name);
+        })->add((new MV));
+
+        // Run app
+        $app->run();
+
+        die;
+	    /*$this->isSetResource();
 
 		$class = $this->installController->getNameController();
 		$method = $this->installController->getNameMethod();
 
 		$segment = new $class();
-		$segment->$method($this->installController->getParams());
+		$segment->$method($this->installController->getParams());*/
 	}
 
     /**

@@ -13,12 +13,17 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+use App\components\Kernel;
 use App\Routes\Routes;
 use App\Components\Router\Router;
 
-$router = new Router(Routes::getRoutes());
+// $router = new Router(Routes::getRoutes());
+$config = require __DIR__ . "/app/components/config/settings.php";
 
-include_once ROOT . '/app/bootstrap/functions.php';
+$kernel = new Kernel($config);
+// include_once ROOT . '/app/bootstrap/functions.php';
 
-$router->init();
-$router->run();
+$kernel->run();
+
+// $router->init();
+// $router->run();
