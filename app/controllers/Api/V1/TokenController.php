@@ -19,7 +19,7 @@ class TokenController extends BaseController
         $data = [];
 
         if(!$refresh) {
-            return $response->withJson(["status" => "fail", "message" => "not authorized"], 401);
+            return $response->withJson(["error" => ["status" => "fail", "code" => 1, "message" => "not authorized"]], 401);
         }
 
         $token = new Token();
@@ -27,19 +27,30 @@ class TokenController extends BaseController
 
         if(!empty($result) && $result['status'] !== "fail") {
             $user = new User;
-            $data["USER"] = $user->getUserById($result->id);
+            $data["user"] = $user->getUserById($result['data']->id);
+
 
             $dataPayload = [
                 "USER" => [
-                    "ID" => $data["USER"]["id"],
-                    "EMAIL" => $data["USER"]["email"]
+                    "ID" => $data["user"]["id"],
+                    "EMAIL" => $data["user"]["email"],
                 ],
             ];
 
-            $data["TOKEN"]["REFRESH"] = $token->processingRecord($data["USER"]["id"], $token->generateRefresh($dataPayload));
+            $data["TOKEN"]["REFRESH"] = $token->processingRecord($data["user"]["id"], $token->generateRefresh($dataPayload));
             $data["TOKEN"]["ACCESS"] = $token->generateAccess($dataPayload);
+            unset($data['user']['password']);
 
-            setcookie($keyToken, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true, "path" => "/"]);
+            // setcookie($keyToken, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true, "path" => "/"]);
+            setcookie(
+                $keyToken,
+                $data["TOKEN"]["REFRESH"],
+                time()+60*60*24*30,
+                "/",
+                "",
+                false,
+                true
+            );
             return $response->withJson($data, 200);
         }
 

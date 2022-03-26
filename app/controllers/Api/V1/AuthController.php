@@ -11,6 +11,9 @@ use App\classes\Validate\ValidateLogin;
 use App\classes\Validate\ValidatePassword;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
 
 class AuthController extends BaseController
 {
@@ -38,7 +41,7 @@ class AuthController extends BaseController
                 $dataPayload = [
                     "USER" => [
                         "ID" => $user->getUserID(),
-                        "EMAIL" => $user->getUserEmail()
+                        "EMAIL" => $user->getUserEmail(),
                     ],
                 ];
 
@@ -47,11 +50,21 @@ class AuthController extends BaseController
                 $data["TOKEN"]["REFRESH"] = $token->processingRecord($user->getUserID(), $token->generateRefresh($dataPayload));
                 $data["TOKEN"]["ACCESS"] = $token->generateAccess($dataPayload);
 
-                $data["USER"]["EMAIL"] = $user->getUserEmail();
-                $data["USER"]["ID"] = $user->getUserID();
+                $data["user"]["email"] = $user->getUserEmail();
+                $data["user"]["ID"] = $user->getUserID();
+                $data["user"]["username"] = $user->getUserName();
                 $data["RESULT"] = self::$authTextSuccess;
 
-                setcookie($keyToken, $data["TOKEN"]["REFRESH"], ["expires" => time()+60*60*24*30, "httponly" => true, "path" => "/"]);
+                setcookie(
+                    $keyToken,
+                    $data["TOKEN"]["REFRESH"],
+                    time()+60*60*24*30,
+                    "/",
+                     "",
+                    false,
+                    true
+                );
+
                 return $response->withJson($data, 200);
             }
             $data["ERROR"] = "Неверный логин или пароль";
@@ -117,7 +130,15 @@ class AuthController extends BaseController
         $token = new Token();
 
         if($result = $token->delete($refresh)) {
-            setcookie($keyToken, "", time() - 3600);
+            setcookie(
+                $keyToken,
+                "",
+                time() - 3600,
+                "/",
+                "",
+                false,
+                true
+            );
 
             return $response->withJson(['status' => 'success'], 200);
         }

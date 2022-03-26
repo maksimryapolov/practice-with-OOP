@@ -1,0 +1,23 @@
+.users {
+
+}
+
+.users ul li:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.pagination {
+    display: flex;
+}
+
+.pagination li {
+    cursor: pointer;
+}
+
+.pagination li:not(:last-child) {
+    margin-right: 10px;
+}
+
+.active {
+    font-weight: bold;
+}

@@ -126,13 +126,16 @@ class Token
          * $decodedData->exp - Дата срока токена
          */
         $key = new Key($this->signatureRefresh, $this->alg);
+        $result = [];
 
         try {
             $decodedData = JWT::decode($refresh, $key);
             $userId = (int)$decodedData->data->id;
             $tokenFromDb = $this->getTokenByUserId($userId);
             if($refresh === $tokenFromDb["refresh"]) {
-                return $decodedData->data;
+                $result['status'] = 'success';
+                $result['data'] = $decodedData->data;
+                return $result;
             }
             throw new \Exception("Invalid token");
         } catch (\Exception $exception) {

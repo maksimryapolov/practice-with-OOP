@@ -19,9 +19,9 @@ use App\Components\Router\Router;
 
 // $router = new Router(Routes::getRoutes());
 $config = require __DIR__ . "/app/components/config/settings.php";
+include_once ROOT . '/app/bootstrap/functions.php';
 
 $kernel = new Kernel($config);
-// include_once ROOT . '/app/bootstrap/functions.php';
 
 $kernel->run();
 
