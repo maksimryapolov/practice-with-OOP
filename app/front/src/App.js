@@ -5,7 +5,7 @@ import CardsContainer from "./Components/Cards/CardsContainer";
 import Register from "./Components/User/Register";
 import UsersContainer from "./Components/Users/UsersContainer";
 import NotFound from "./Components/NotFound/404";
-import AuthContainer from "./Components/User/AuthContainer";
+import AuthContainer from "./Components/User/Auth/AuthContainer";
 import { connect } from "react-redux";
 import Loader from "./Components/Loader/Loader";
 import { setInitialData } from "./redux/redusers/appReducer";
