@@ -26,6 +26,10 @@ api.interceptors.response.use(response => {
             }
             // return api.request(error.config);
         }
+
+        if(error.response.status === 400) {
+            return error.response;
+        }
     } catch (e) {
         throw console.log(e);
     }

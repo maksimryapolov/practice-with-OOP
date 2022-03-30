@@ -31,6 +31,19 @@ const authenticate = {
         );
     },
 
+    register: (login, email, password) => {
+        return api.post("/user/register", {
+            LOGIN: login,
+            EMAIL: email,
+            PASSWORD: password,
+            SUBMIT: "send"
+        }).then(response => {
+            if(response.status === 200) {
+               return response.data;
+            }
+        });
+    },
+
     logout: () => {
         return api.post("/user/logout").then(response => {
             if (response.status === 200) {

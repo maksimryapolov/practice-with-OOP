@@ -10,6 +10,7 @@ const intialState = {
     },
     isAuth: false,
     loading: false,
+    txt: "123"
 };
 
 export const authReducer = (state = intialState, action) => {

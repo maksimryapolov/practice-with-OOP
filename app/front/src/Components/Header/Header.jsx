@@ -4,7 +4,6 @@ import s from "./header.module.css";
 import { connect } from "react-redux";
 
 function Header (props) {
-    console.log(props.isAuth);
     return (
         <header className={s.header}>
             <div className={s.logo}>

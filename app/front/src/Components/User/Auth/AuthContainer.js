@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { sendAuthData, setLoading, logout } from "../../../redux/redusers/authReducer";
 import { Auth } from "./Auth";
+import {exampleAuth, getTxt, loading, statusAuth, userData} from "./select";
 
 class AuthContainer extends React.Component {
     onSubmit = async (values) => {
@@ -18,6 +19,7 @@ class AuthContainer extends React.Component {
     }
 
     render() {
+        console.log(this.props.txt);
         return <Auth loading={this.props.loading}
                      isAuth={this.props.isAuth}
                      user={this.props.user}
@@ -28,9 +30,10 @@ class AuthContainer extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        isAuth: state.authPage.isAuth,
-        user: state.authPage.user,
-        loading: state.authPage.loading,
+        isAuth: statusAuth(state),
+        user: userData(state),
+        loading: loading(state),
+        txt: exampleAuth(state)
     };
 }
 
