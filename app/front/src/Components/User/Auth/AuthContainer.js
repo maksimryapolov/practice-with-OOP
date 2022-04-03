@@ -19,7 +19,6 @@ class AuthContainer extends React.Component {
     }
 
     render() {
-        console.log(this.props.txt);
         return <Auth loading={this.props.loading}
                      isAuth={this.props.isAuth}
                      user={this.props.user}

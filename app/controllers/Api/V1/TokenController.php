@@ -29,7 +29,6 @@ class TokenController extends BaseController
             $user = new User;
             $data["user"] = $user->getUserById($result['data']->id);
 
-
             $dataPayload = [
                 "USER" => [
                     "ID" => $data["user"]["id"],
@@ -54,7 +53,7 @@ class TokenController extends BaseController
             return $response->withJson($data, 200);
         }
 
-        setcookie($keyToken, "", time() - 3600);
-        return $response->withJson(["status" => "fail", "message" => "Fail validate token"], 401);
+        setcookie($keyToken, "", time() - 3600, "/", "", false, true);
+        return $response->withJson(["error" => ["status" => "fail", "code" => 1, "message" => "Fail validate token"]], 401);
     }
 }

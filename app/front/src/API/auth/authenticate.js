@@ -1,5 +1,5 @@
-import {api} from "./instance";
-import axios from "axios";
+import {api} from "../instance";
+import {tokenStorage} from "../../common/token/token";
 
 const authenticate = {
     auth(login, password) {
@@ -8,12 +8,10 @@ const authenticate = {
                 LOGIN: login,
                 PASSWORD: password,
                 SUBMIT: "send",
-            })
-            .then((response) => {
-                console.log(response);
+            }).then((response) => {
                 if (response.status === 200) {
                     // TODO: Продумать более логичное место для сохранения
-                    this.setTokenInlocal(response.data.TOKEN.ACCESS);
+                    tokenStorage.set({key: "token", token: response.data.TOKEN.ACCESS});
                     return response.data;
                 }
             });
@@ -24,7 +22,7 @@ const authenticate = {
             .post("/user/refresh", {})
             .then(response => {
                 if (response.status === 200) {
-                    this.setTokenInlocal(response.data.TOKEN.ACCESS);
+                    tokenStorage.set({key: "token", token: response.data.TOKEN.ACCESS});
                     return response.data;
                 }
             }
@@ -47,15 +45,11 @@ const authenticate = {
     logout: () => {
         return api.post("/user/logout").then(response => {
             if (response.status === 200) {
-                localStorage.removeItem("token");
+                tokenStorage.remove("token");
                 return response.data;
             }
         });
-    },
-
-    setTokenInlocal(token) {
-        localStorage.setItem("token", token);
-    },
+    }
 };
 
 export default authenticate;

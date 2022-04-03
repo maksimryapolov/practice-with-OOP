@@ -132,10 +132,14 @@ class Token
             $decodedData = JWT::decode($refresh, $key);
             $userId = (int)$decodedData->data->id;
             $tokenFromDb = $this->getTokenByUserId($userId);
+
             if($refresh === $tokenFromDb["refresh"]) {
                 $result['status'] = 'success';
                 $result['data'] = $decodedData->data;
                 return $result;
+            } else {
+                // Пользователю надо снова залогиниться
+                return ['status' => 'fail', 'message' => 'Невалидный токен авторизуйтесь!'];
             }
             throw new \Exception("Invalid token");
         } catch (\Exception $exception) {

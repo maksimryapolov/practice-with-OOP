@@ -13,7 +13,7 @@ const UsersPresentation = (props) => {
     }
 
     let users = props.users.map((i, idx) => {
-        return  <li key={idx}><NavLink to={`/users/${i.id}`}>{i.id}</NavLink> - Name: {i.name}, | Phone: {i.phone} | email: {i.email}</li>
+        return  <li key={idx}>Name: {i.username}, | email: {i.email}</li>
     });
 
     let pagination = () => {

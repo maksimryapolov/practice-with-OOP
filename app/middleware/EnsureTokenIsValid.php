@@ -12,7 +12,11 @@ class EnsureTokenIsValid
 {
     public function run(Request $request, Response $response, $next)
     {
-        $accessToken = explode(" ", $request->getHeader('HTTP_AUTHORIZATION')[0])[1];
+
+        if($request->getHeader('HTTP_AUTHORIZATION')) {
+            $accessToken = explode(" ", $request->getHeader('HTTP_AUTHORIZATION')[0])[1];
+        }
+
         $token = new Token();
 
         if(isset($accessToken) && $accessToken) {
@@ -28,7 +32,10 @@ class EnsureTokenIsValid
             return $newResponse;
         }
 
-        $newResponse = $response->withStatus(401)->withJson(["status" => "fail", "message" => "Not authorized"]);
+        $newResponse = $response->withStatus(401)->withJson(
+            ["error" => ["status" => "fail", "code" => 2, "message" => "Not authorized"]]
+        );
+
         $next($request, $newResponse);
         return $newResponse;
     }

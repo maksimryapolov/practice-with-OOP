@@ -1,5 +1,7 @@
 import * as axios from "axios";
+import {api} from "./instance";
 
+/*
 let instance = axios.create({
     baseURL: "https://jsonplaceholder.typicode.com/",
 });
@@ -16,5 +18,16 @@ const users = {
             });
     },
 };
+*/
+
+const users = {
+    getUsers() {
+        return api.post('/users').then(response => {
+            if(response.status === 200) {
+                return response.data;
+            }
+        })
+    }
+}
 
 export default users;

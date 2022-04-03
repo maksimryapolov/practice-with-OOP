@@ -1,17 +1,22 @@
 import React from "react";
-import {Navigate} from "react-router-dom";
+import {Navigate, NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.usersPage.isAuth
+        // isAuth: state.usersPage.isAuth
+        auth: state.authPage.isAuth
     };
 }
 
 let withAuthRedirect = (Component) => {
     class AuthRedirectComponent extends React.Component {
         render() {
-            if(!this.props.isAuth) return <Navigate to="/" />
+            if(!this.props.auth) {
+                return <div>
+                    Необходимо авторизоваться <NavLink to={"/auth"}>авторизоваться</NavLink>
+                </div>
+            }
             return <Component {...this.props}/>;
         }
     }

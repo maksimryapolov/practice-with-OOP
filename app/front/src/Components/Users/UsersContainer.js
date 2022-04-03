@@ -2,7 +2,6 @@ import React from "react";
 import {connect} from "react-redux";
 import {compose} from "redux";
 import UsersPresentation from "./UsersPresentation";
-
 import {
     setCurPage,
     setLoading,
@@ -42,6 +41,7 @@ class Users extends React.Component{
                 users={this.props.users}
                 pagination={this.props.pagination}
                 paginClickHandler={this.paginClickHandler.bind(this)}
+                auth={this.props.auth}
             />
         )
     }

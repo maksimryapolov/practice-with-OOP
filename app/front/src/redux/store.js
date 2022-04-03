@@ -6,7 +6,7 @@ import { authReducer } from "./redusers/authReducer";
 import { appReducer } from "./redusers/appReducer";
 import {registerReducer} from "./redusers/registerReducer";
 
-let redusers = combineReducers({
+let reducers = combineReducers({
     mainPage: cardsReduser,
     usersPage: usersReduser,
     authPage: authReducer,
@@ -14,6 +14,6 @@ let redusers = combineReducers({
     app: appReducer
 });
 
-let store = createStore(redusers, applyMiddleware(thunkMiddleware));
+let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 export default store;

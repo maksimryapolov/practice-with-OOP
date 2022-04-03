@@ -59,21 +59,19 @@ export let setLoading = (flag) => ({ type: SET_LOADING, flag });
 
 export let setUsersApi = (limit, current, isSetAllPage, isLoading) => async dispatch => {
 
-    let result = await usersApi.getUsers(limit, current);
-    await dispatch(setUsersList(result));
-    await dispatch(setLoading(!isLoading));
+        let result = await usersApi.getUsers(limit, current);
+        console.log(result);
+        /*let promise = usersApi.getUsers(limit, current).then((res) => {
+            if (res.data && res.data.length) {
+                if (isSetAllPage) {
+                    dispatch(setCountAllPage(res.countRecords));
+                }
 
-    /*let promise = usersApi.getUsers(limit, current).then((res) => {
-        if (res.data && res.data.length) {
-            if (isSetAllPage) {
-                dispatch(setCountAllPage(res.countRecords));
+                dispatch(setUsersList(res.data));
+                dispatch(setLoading(!isLoading));
             }
+        });*/
 
-            dispatch(setUsersList(res.data));
-            dispatch(setLoading(!isLoading));
-        }
-    });*/
-
-    // Для инициализации приложения
-    // Promise.all([promise]).then((data) => {});
+        // Для инициализации приложения
+        // Promise.all([promise]).then((data) => {});
 };
