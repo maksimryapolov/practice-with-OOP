@@ -19,7 +19,7 @@ class ValidatePassword extends MainValidate
      */
     protected $nameParam = "Пароль";
     protected $input;
-    protected $descError = "должен содержать минимум #LENGTH# символа";
+    protected $descError = "должен содержать минимум #LENGTH# символов!";
 
     /**
      * @var int

@@ -67,7 +67,8 @@ class AuthController extends BaseController
 
                 return $response->withJson($data, 200);
             }
-            $data["ERROR"] = "Неверный логин или пароль";
+
+            return $response->withJson(["error" => ["status" => "fail", "code" => 3, "message" => ["Неверный логин или пароль"]]], 401);
         }
 
         return $response->withJson($data, 401);
@@ -82,30 +83,40 @@ class AuthController extends BaseController
 
         ['LOGIN' => $login, 'PASSWORD' => $pass, "EMAIL" => $email, "SUBMIT" => $submit] = $request->getParams();
 
+
         if(isset($submit) && $submit && !USER::isAuth()) {
             $vLogin = new ValidateLogin($login);
             if(!$vLogin->check()) {
-                $data["ERROR"]["LOGIN"] = $vLogin->getError();
+                $data["ERROR"]["STATUS"] = true;
+                $data["ERROR"]["MESSAGES"][] = $vLogin->getError();
             }
 
             $vEmail = new VadlidateEmail($email);
             if(!$vEmail->check()) {
-                $data["ERROR"]["EMAIL"] = $vEmail->getError();
+                $data["ERROR"]["STATUS"] = true;
+                $data["ERROR"]["MESSAGES"][] = $vEmail->getError();
             }
 
             $vPass = new ValidatePassword($pass);
             if(!$vPass->check()) {
-                $data["ERROR"]["PASSWORD"] = $vPass->getError();
+                $data["ERROR"]["STATUS"] = true;
+                $data["ERROR"]["MESSAGES"][] = $vPass->getError();
             }
 
-            if(
-                (
-                    (!isset($data["ERROR"]["EMAIL"]) && !$data["ERROR"]["EMAIL"]) ||
-                    (!isset($data["ERROR"]["LOGIN"]) && !$data["ERROR"]["LOGIN"])
-                ) &&
-                User::checkUserByEmail($email, $login)
-            ) {
-                $data["ERROR"]["AUTH"] = User::checkUserByEmail($email, $login);
+            if(!isset($data["ERROR"]["LOGIN"]) && User::checkUserByEmail($login)) {
+                $data["ERROR"]["AUTH"] = User::checkUserByEmail($login);
+
+                if($data["ERROR"]["AUTH"]) {
+                    $data["ERROR"]["IS_EXISTS_LOGIN"] = true;
+                }
+            }
+
+            if(!isset($data["ERROR"]["EMAIL"]) && User::checkUserByEmail($email)) {
+                $data["ERROR"]["AUTH"] = User::checkUserByEmail($email);
+
+                if($data["ERROR"]["AUTH"]) {
+                    $data["ERROR"]["IS_EXISTS_EMAIL"] = true;
+                }
             }
 
             if(empty($data["ERROR"]) && !$data["ERROR"]) {
@@ -118,6 +129,22 @@ class AuthController extends BaseController
 
                 return $response->withJson($data, 200);
             }
+        }
+
+        if(isset($data["ERROR"]["IS_EXISTS_LOGIN"]) && isset($data["ERROR"]["IS_EXISTS_EMAIL"])) {
+            $data["ERROR"]["STATUS"] = true;
+            $data["ERROR"]["FULL_EXISTS_STATUS"] = true;
+            $data["ERROR"]["MESSAGES"][] = "Логин или почта уже используется!";
+        }
+
+        if(isset($data["ERROR"]["IS_EXISTS_LOGIN"]) && $data["ERROR"]["IS_EXISTS_LOGIN"] && !isset($data["ERROR"]["FULL_EXISTS_STATUS"])) {
+            $data["ERROR"]["STATUS"] = true;
+            $data["ERROR"]["MESSAGES"][] = "Логин уже используется!";
+        }
+
+        if(isset($data["ERROR"]["IS_EXISTS_EMAIL"]) && $data["ERROR"]["IS_EXISTS_EMAIL"] && !isset($data["ERROR"]["FULL_EXISTS_STATUS"])) {
+            $data["ERROR"]["STATUS"] = true;
+            $data["ERROR"]["MESSAGES"][] = "Почта уже используется!";
         }
 
         return $response->withJson($data, 400);
@@ -144,6 +171,26 @@ class AuthController extends BaseController
         }
 
         return $response->withJson($result, 200);
+    }
+
+    public function checkEmail(Request $request, Response $response)
+    {
+        $name = $request->getParam('email');
+        $result = [];
+
+        if($name) {
+            $user = new User();
+
+            if($user->checkUserByEmail($name)) {
+                $result["status"] = "fail";
+                $result["message"] = "Такой пользователь уже есть!";
+                return $response->withJson($result, 200);
+            }
+
+            return $response->withJson(['status' => 'success', 'message' => ''], 200);
+        }
+
+        return $response->withJson(['status' => 'fail', 'message' => 'Укажите логин или email'], 200);
     }
 
     private function getTokenKeyName()

@@ -123,23 +123,24 @@ class User
      * @param string $email
      * @return bool|string
      */
-    static public function checkUserByEmail($email="", $login="")
+    static public function checkUserByEmail($loginOrEmail = "")
     {
 
-        if($email || $login) {
+        if($loginOrEmail) {
             $key = "COUNT_EMAIL";
 
             $db = (new DB)->getConnection();
-            $query = "SELECT COUNT(*) AS $key FROM `users` WHERE email=:email OR username=:username";
+            $query = "SELECT COUNT(*) AS $key FROM `users` WHERE email=:loginOrEmail OR username=:loginOrEmail";
 
             $st = $db->prepare($query);
-            $st->bindParam(":email", $email);
-            $st->bindParam(":username", $login);
+            $st->bindParam(":loginOrEmail", $loginOrEmail);
+//            $st->bindParam(":username", $login);
             $st->execute();
             $result = (int)$st->fetch()[$key];
 
             if($result > 0) {
-                return "Имя пользователя или пароль уже используется";
+                // return "Имя пользователя или пароль уже используется";
+                return true;
             }
 
             return false;

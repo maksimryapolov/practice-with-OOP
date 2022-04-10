@@ -12,13 +12,15 @@ class RegisterContainer extends React.Component {
     render() {
         return <Register isRegister={this.props.isRegister}
                          onSubmit={this.onSubmit}
+                         errorMsg={this.props.errorsMsg}
                 />
     }
 }
 
 const mapStateToProps = state => {
     return {
-        isRegister: state.register.isRegister
+        isRegister: state.register.isRegister,
+        errorsMsg: state.register.errorsMsg
     }
 }
 

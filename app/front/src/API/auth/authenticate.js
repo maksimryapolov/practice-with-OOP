@@ -13,6 +13,8 @@ const authenticate = {
                     // TODO: Продумать более логичное место для сохранения
                     tokenStorage.set({key: "token", token: response.data.TOKEN.ACCESS});
                     return response.data;
+                } else if(response.status === 401) {
+                    return response.data;
                 }
             });
     },
@@ -36,7 +38,7 @@ const authenticate = {
             PASSWORD: password,
             SUBMIT: "send"
         }).then(response => {
-            if(response.status === 200) {
+            if(response.status === 200 || response.status === 400) {
                return response.data;
             }
         });

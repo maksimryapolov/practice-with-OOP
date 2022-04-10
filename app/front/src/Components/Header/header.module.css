@@ -3,29 +3,32 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgb(219, 219, 219);
     margin-bottom: 20px;
 }
 
-.logo h1 {
-    font-weight: 400;
+.logo_img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
 }
 
-.logo a {
+.logo_link {
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    font-weight: 700;
+}
+
+.logo a,
+.logo a:hover {
     text-decoration: none;
-    color: black;
+    color: #131022;
 }
 
 .linkActive {
-    color: darkgray;
-}
-
-.user a {
-    text-decoration: none;
-}
-
-.user a:hover {
-    text-decoration: underline;
+    color: #6366f1;
 }
 
 .user a:last-child {

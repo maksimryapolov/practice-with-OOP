@@ -2,6 +2,7 @@ import authenticate from "../../API/auth/authenticate";
 
 const SET_USER = "authReducer/SET_USER_DATA";
 const SET_LOADING = "authReducer/SET_LOADING";
+const SET_ERRORS_API = "authReducer/SET_ERRORS_API";
 
 const intialState = {
     user: {
@@ -10,6 +11,7 @@ const intialState = {
     },
     isAuth: false,
     loading: false,
+    errorsMsg: [],
     txt: "123"
 };
 
@@ -30,6 +32,11 @@ export const authReducer = (state = intialState, action) => {
                 ...state,
                 loading: action.loading,
             };
+        case SET_ERRORS_API:
+            return {
+                ...state,
+                errorsMsg: action.error
+            }
         default:
             return state;
     }
@@ -38,16 +45,23 @@ export const authReducer = (state = intialState, action) => {
 export const setUserData = (data) => ({ type: SET_USER, data });
 export const setLoading = (loading) => ({ type: SET_LOADING, loading });
 
+const setErrorsApi = error => ({ type: SET_ERRORS_API, error});
+
 export const sendAuthData = (login, password) => {
     return async (dispatch) => {
-        let result = await authenticate.auth(login, password);
-        dispatch(
-            setUserData({
-                email: result.user.email,
-                name: result.user.username,
-                auth: true
-            })
-        );
+        let res = await authenticate.auth(login, password);
+
+        if(res.RESULT) {
+            dispatch(
+                setUserData({
+                    email: res.user.email,
+                    name: res.user.username,
+                    auth: true
+                })
+            );
+        } else if(res.error) {
+            dispatch(setErrorsApi(res.error.message));
+        }
     };
 };
 

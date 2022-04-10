@@ -25,19 +25,19 @@ api.interceptors.response.use(response => {
         if(error.response.status === 401) {
             switch(error.response.data.error.code) {
                 case 1: // not refresh
-                    console.log("Нет refresh токена");
+                    // Нет refresh токена
                     return error.response;
                 case 2: // not access
-                    // Обработка повторного запроса для access
-                    // 1. отправить на обновление access token
-                    // 2.
-
-                   let res = await inst.post("/user/refresh");
-
-                    if(res.data.TOKEN.ACCESS) {
-                       tokenStorage.set({token: res.data.TOKEN.ACCESS});
-                       return api.request(error.config);
-                   }
+                    if(!error.config._isRetry) {
+                        let res = await inst.post("/user/refresh");
+                        error.config._isRetry = true;
+                        if(res.data.TOKEN.ACCESS) {
+                            tokenStorage.set({token: res.data.TOKEN.ACCESS});
+                            return api.request(error.config);
+                        }
+                    }
+                case 3: // Неверные данные для входа
+                    return error.response;
             }
         }
 

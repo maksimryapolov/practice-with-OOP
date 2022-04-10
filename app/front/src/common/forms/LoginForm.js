@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import s from "./forms.module.css";
 
 const initialValues = () => {
     return {
@@ -11,11 +12,11 @@ const initialValues = () => {
 
 const validationSchema = Yup.object({
     login: Yup.string()
-        .min(3, "Минимальная длина 3 символа")
+        .min(3, "Минимальная длина 3 символа!")
         .required("Поле обязательно для заполнения!"),
 
     password: Yup.string()
-        .min(6, "Минимальная длина 6 символов")
+        .min(6, "Минимальная длина 6 символов!")
         .required("Поле обязательно для заполнения!"),
 });
 
@@ -27,20 +28,27 @@ export default class extends React.Component {
                 onSubmit={this.props.onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form>
-                    <div>
-                        <Field name="login" type="text" />
-                        <ErrorMessage name="login" />
+                <Form className={s.loginForm}>
+                    <div className={s.wrapper}>
+                        <label htmlFor="login">Логин/почта</label>
+                        <Field id="login" name="login" type="text"/>
+                        <div className={s.error}>
+                            <ErrorMessage name="login" />
+                        </div>
                     </div>
-                    <div>
-                        <Field name="password" type="password" />
-                        <ErrorMessage name="password" />
+                    <div className={s.wrapper}>
+                        <label htmlFor="password">Пароль</label>
+                        <Field id="password" name="password" type="password" />
+                        <div className={s.error}>
+                            <ErrorMessage name="password" />
+                        </div>
                     </div>
-                    <div>
+                    <div className={s.wrapper}>
                         <Field
+                            className={s.btn}
                             name="submit"
                             type="submit"
-                            placeholder="Отправить"
+                            placeholder="Войти"
                         />
                     </div>
                 </Form>
