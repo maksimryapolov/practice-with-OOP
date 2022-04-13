@@ -4,6 +4,7 @@ import {NavLink} from "react-router-dom";
 import s from "./register.module.css";
 
 const Register = props => {
+
     if(props.isRegister) {
         return <div className={s.register}>
             <h2>Вы успешно зарегестрировались!</h2>
@@ -25,7 +26,7 @@ const Register = props => {
                 { props.errorMsg.map((i, idx) => <div className={s['main-error']} key={idx}>{i}</div>) }
             </div>
             <div className={s.wrapper}>
-                <RegisterForm onSubmit={props.onSubmit}/>
+                <RegisterForm onSubmit={props.onSubmit} loading={props.loading}/>
             </div>
         </div>
     );

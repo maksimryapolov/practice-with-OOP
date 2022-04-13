@@ -1,20 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect} from "react-redux";
 import {compose} from "redux";
 import Register from "./Register";
-import {sendRegisterData} from "../../../redux/redusers/registerReducer";
+import {sendData} from "../../../redux/redusers/registerReducer";
+import {withWrapperSendForm} from "../../../hoc/withWrapperSendForm";
 
-class RegisterContainer extends React.Component {
-    onSubmit = data => {
-        this.props.sendRegisterData(data);
-    }
-
-    render() {
-        return <Register isRegister={this.props.isRegister}
-                         onSubmit={this.onSubmit}
-                         errorMsg={this.props.errorsMsg}
-                />
-    }
+const RegisterContainer = props => {
+    return <Register isRegister={props.isRegister}
+                     onSubmit={props.onSubmit}
+                     errorMsg={props.errorsMsg}
+                     loading={props.loading}
+            />
 }
 
 const mapStateToProps = state => {
@@ -25,5 +21,6 @@ const mapStateToProps = state => {
 }
 
 export default compose(
-    connect(mapStateToProps, {sendRegisterData})
+    connect(mapStateToProps, {sendData}),
+    withWrapperSendForm
 )(RegisterContainer);

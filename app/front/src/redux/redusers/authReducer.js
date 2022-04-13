@@ -47,9 +47,9 @@ export const setLoading = (loading) => ({ type: SET_LOADING, loading });
 
 const setErrorsApi = error => ({ type: SET_ERRORS_API, error});
 
-export const sendAuthData = (login, password) => {
+export const sendData = (data) => {
     return async (dispatch) => {
-        let res = await authenticate.auth(login, password);
+        let res = await authenticate.auth(data.login, data.password);
 
         if(res.RESULT) {
             dispatch(

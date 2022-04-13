@@ -22,12 +22,7 @@ const useSendUserNameProfile = (email) => {
 }
 
 export const Auth = props => {
-    // let [login, setLogin] = useState("");
     // let {isLoading, error, data} = useSendUserNameProfile(login);
-
-    if(props.loading) {
-        return <Loader/>
-    }
 
     if (props.isAuth) {
         return (
@@ -60,7 +55,7 @@ export const Auth = props => {
                 { props.errorsMsg.map((i,idx)=> <div className={s['main-error']} key={idx}>{i}</div>) }
             </div>
             <div className={s.wrapper}>
-                <LoginForm onSubmit={props.onSubmit}/>
+                <LoginForm onSubmit={props.onSubmit} loading={props.loading}/>
             </div>
         </div>
     );

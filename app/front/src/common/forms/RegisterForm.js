@@ -1,7 +1,8 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import s from "./forms.module.css";
+import {WrapperField} from "./inputFields/WrapperField";
+import {WrapperBtn} from "./inputBtn/WrapperBtn";
 
 const initialValues = () => {
     return {
@@ -32,35 +33,23 @@ export default class extends React.Component {
                 validationSchema={validationSchema}
             >
                 <Form>
-                    <div className={s.wrapper}>
-                        <label htmlFor="login">Логин</label>
-                        <Field id="login" name="login" type="text" />
-                        <div className={s.error}>
-                            <ErrorMessage name="login" />
-                        </div>
-                    </div>
-                    <div className={s.wrapper}>
-                        <label htmlFor="email">Почта</label>
-                        <Field id="email" name="email" type="text" />
-                        <div className={s.error}>
-                            <ErrorMessage name="email" />
-                        </div>
-                    </div>
-                    <div className={s.wrapper}>
-                        <label htmlFor="password">Пароль</label>
-                        <Field id="password" name="password" type="password" />
-                        <div className={s.error}>
-                            <ErrorMessage name="password" />
-                        </div>
-                    </div>
-                    <div className={s.wrapper}>
-                        <Field
-                            className={s.btn}
-                            name="submit"
-                            type="submit"
-                            placeholder="Отправить"
-                        />
-                    </div>
+                    <WrapperField name={"login"}
+                                  id={"login"}
+                                  type={"text"}
+                                  title={"Логин"}
+                    />
+                    <WrapperField name={"email"}
+                                  id={"email"}
+                                  type={"email"}
+                                  title={"Почта"}
+                    />
+                    <WrapperField name={"password"}
+                                  id={"password"}
+                                  type={"password"}
+                                  title={"Пароль"}
+                    />
+
+                    <WrapperBtn loading={this.props.loading} />
                 </Form>
             </Formik>
         );

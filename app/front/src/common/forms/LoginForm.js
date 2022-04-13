@@ -1,7 +1,9 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import {WrapperField} from "./inputFields/WrapperField";
 import s from "./forms.module.css";
+import {WrapperBtn} from "./inputBtn/WrapperBtn";
 
 const initialValues = () => {
     return {
@@ -28,29 +30,18 @@ export default class extends React.Component {
                 onSubmit={this.props.onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form className={s.loginForm}>
-                    <div className={s.wrapper}>
-                        <label htmlFor="login">Логин/почта</label>
-                        <Field id="login" name="login" type="text"/>
-                        <div className={s.error}>
-                            <ErrorMessage name="login" />
-                        </div>
-                    </div>
-                    <div className={s.wrapper}>
-                        <label htmlFor="password">Пароль</label>
-                        <Field id="password" name="password" type="password" />
-                        <div className={s.error}>
-                            <ErrorMessage name="password" />
-                        </div>
-                    </div>
-                    <div className={s.wrapper}>
-                        <Field
-                            className={s.btn}
-                            name="submit"
-                            type="submit"
-                            placeholder="Войти"
-                        />
-                    </div>
+                <Form>
+                    <WrapperField name={"login"}
+                                  id={"login"}
+                                  type={"text"}
+                                  title={"Логин/почта"}
+                    />
+                    <WrapperField name={"password"}
+                                  id={"password"}
+                                  type={"password"}
+                                  title={"Пароль"}
+                    />
+                    <WrapperBtn loading={this.props.loading} />
                 </Form>
             </Formik>
         );

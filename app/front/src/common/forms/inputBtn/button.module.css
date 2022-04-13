@@ -1,0 +1,26 @@
+.button {
+    color: #fff;
+    background-color: #6366f1;
+    border-color: #6366f1;
+    box-shadow: 0 0.5rem 1.125rem -0.5rem rgb(99 102 241 / 90%);
+    cursor: pointer;
+}
+
+.loader {
+    background-color: #6366F1BC;
+    color: #fff;
+    text-align: center;
+    padding: 13px 10px;
+    border-radius: 5px;
+}
+
+.text {
+    clip-path: inset(0 1.2ch 0 0);
+    animation: l 1s steps(4) infinite;
+}
+
+@keyframes l {
+    to {
+        clip-path: inset(0 -1ch 0 0)
+    }
+}

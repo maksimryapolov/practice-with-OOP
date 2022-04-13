@@ -1,0 +1,17 @@
+.label {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.errorInput {
+    border-color: #ef4444 !important;
+}
+
+.fieldWrapper:after {
+    content: url("../../../assets/img/error.svg");
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 40px;
+    right: 10px;
+}
