@@ -1,27 +1,29 @@
 <?php
 
+
 namespace App\classes\Validate;
+
 
 use App\classes\Validate\InterfaceV\MainValidate;
 use Respect\Validation\Validator as v;
 
 /**
- * Class ValidateLogin
+ * Class ValidateString
  * @package App\classes\Validate
  */
-class ValidateLogin extends MainValidate
+class ValidateString extends MainValidate
 {
     /**
      * @var string
      */
-    protected $nameParam = "Логин";
+    protected $nameParam = "Название";
     protected $input;
     protected $descError = "должен содержать минимум #LENGTH# символа"; // echo definesEnding(631, array('символ', 'символа', 'символов'));
 
     /**
      * @var int
      */
-    private $length = 3;
+    private $length = 2;
 
     /**
      * @var v

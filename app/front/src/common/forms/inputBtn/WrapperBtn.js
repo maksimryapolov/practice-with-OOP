@@ -10,7 +10,7 @@ export const WrapperBtn = props => {
         <Wrapper>
             {!props.loading ?
                 <Field
-                    className={base.btn + ' ' + s.button}
+                    className={base.btn + ' cursor-pointer shadow-lg shadow-indigo-500/50 text-white border-indigo-500 bg-indigo-500'}
                     name="submit"
                     type="submit"
                     placeholder="Войти"

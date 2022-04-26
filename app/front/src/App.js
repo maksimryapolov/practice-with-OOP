@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import Loader from "./Components/Loader/Loader";
 import { setInitialData } from "./redux/redusers/appReducer";
 import RegisterContainer from "./Components/User/Register/RegisterContainer";
+import {BoardsContainer} from "./Components/Boards/BoardsContainer";
+import AddContainer from "./Components/Boards/Add/AddContainer";
 
 function App({ loading, setInitialData }) {
     useEffect(() => {
@@ -24,6 +26,11 @@ function App({ loading, setInitialData }) {
             <Header />
             <Routes>
                 <Route path="/" element={<CardsContainer />} />
+                <Route path="/boards" >
+                    <Route index element={<BoardsContainer />} />
+                    <Route path="add" element={<AddContainer />}/>
+                </Route>
+
                 <Route path="/users" element={<UsersContainer />} />
                 <Route path="/auth" element={<AuthContainer />} />
                 <Route path="/register" element={<RegisterContainer />} />

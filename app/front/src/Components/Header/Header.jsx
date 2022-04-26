@@ -11,7 +11,7 @@ function Header (props) {
                 <h1>
                     <NavLink className={s.logo_link} to="/">
                         <img className={s.logo_img} src={logo} alt="Logo"/>
-                        <span>Финмэн</span>
+                        <span>Менифин</span>
                     </NavLink>
                 </h1>
             </div>

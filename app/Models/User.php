@@ -232,4 +232,22 @@ class User
         return $result;
     }
 
+    /**
+     * @param $access
+     * @return int
+     */
+    static public function getCurUser($access) :int
+    {
+        $token = new Token();
+        $res = $token->verifyAccess($access);
+
+        if(isset($res["status"]) && $res["status"] != 'fail') {
+            $userData = $res['data'];
+            
+            return $userData->id;
+        }
+
+        return 0;
+    }
+
 }

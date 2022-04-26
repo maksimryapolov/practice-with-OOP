@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateTableBoards extends AbstractMigration
+class CreateTableRecords extends AbstractMigration
 {
     /**
      * Change Method.
@@ -31,12 +31,17 @@ class CreateTableBoards extends AbstractMigration
      */
     public function change()
     {
-        $users = $this->table('boards');
-        $users->addColumn('created', 'datetime') // Дата записи
+        $records = $this->table('records');
+        $records->addColumn('created', 'datetime') // Дата записи
             ->addColumn('deposit_amount', 'float', ['precision' => 2]) //Общая сумма прихода за день
-            ->addColumn('expenses_per_day', 'float', ['precision' => 2]) // Общая сумма трат за день
             ->addColumn("user_id", "integer")
-            ->addForeignKey("user_id", "users", "id") // Пользователь
+            ->addColumn("category_id", "integer")
+            ->addColumn("account_id", "integer")
+            ->addColumn("type_id", "integer")
+            ->addForeignKey("user_id", "users", "id", ["delete" => "CASCADE"]) // Пользователь
+            ->addForeignKey("category_id", "categories", "id", ["delete" => "CASCADE"])
+            ->addForeignKey("account_id", "accounts", "id", ["delete" => "CASCADE"])
+            ->addForeignKey("type_id", "types", "id", ["delete" => "CASCADE"])
             ->create();
     }
 }

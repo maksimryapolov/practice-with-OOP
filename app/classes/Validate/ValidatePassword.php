@@ -33,7 +33,7 @@ class ValidatePassword extends MainValidate
 
     public function __construct($input)
     {
-        $this->input = $input;
+        parent::__construct($input);
         $this->validated = v::stringVal()->length($this->length)->setName($this->nameParam);
     }
 

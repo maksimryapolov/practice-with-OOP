@@ -1,23 +1,20 @@
 <?php
 
+
 namespace App\classes\Validate;
+
 
 use App\classes\Validate\InterfaceV\MainValidate;
 use Respect\Validation\Validator as v;
 
-class VadlidateEmail extends MainValidate
+class ValidateNumber extends MainValidate
 {
     /**
      * @var string
      */
-    protected $nameParam = "Email";
+    protected $nameParam = "Сумма";
     protected $input;
-    protected $descError = "некорректный";
-
-    /**
-     * @var int
-     */
-    private $length = 3;
+    protected $descError = "не число";
 
     /**
      * @var v
@@ -27,7 +24,7 @@ class VadlidateEmail extends MainValidate
     public function __construct($input)
     {
         parent::__construct($input);
-        $this->validated = v::email()->setName($this->nameParam);
+        $this->validated = v::number()->setName($this->nameParam);
     }
 
     /**

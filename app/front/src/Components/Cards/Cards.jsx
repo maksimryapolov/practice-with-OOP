@@ -25,7 +25,6 @@ const validationSchema = Yup.object({
 
 
 let CardsForm = () => {
-    console.log("RENDER");
     return (
         <Formik
             initialValues={initialValues()}

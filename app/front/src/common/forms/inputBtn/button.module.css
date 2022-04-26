@@ -1,8 +1,4 @@
 .button {
-    color: #fff;
-    background-color: #6366f1;
-    border-color: #6366f1;
-    box-shadow: 0 0.5rem 1.125rem -0.5rem rgb(99 102 241 / 90%);
     cursor: pointer;
 }
 

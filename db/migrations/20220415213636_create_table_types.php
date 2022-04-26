@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreatTableTokens extends AbstractMigration
+class CreateTableTypes extends AbstractMigration
 {
     /**
      * Change Method.
@@ -31,11 +31,8 @@ class CreatTableTokens extends AbstractMigration
      */
     public function change()
     {
-        $tokens = $this->table('tokens');
-        $tokens
-            ->addColumn('user_id', 'integer')
-            ->addColumn('refresh', 'string')
-            ->addForeignKey("user_id", "users", "id", ["delete" => "CASCADE"])
+        $types = $this->table("types");
+        $types->addColumn("name", "string")
             ->create();
     }
 }

@@ -12,9 +12,13 @@ abstract class MainValidate
     protected $descError;
     private $errors;
 
+    public function __construct($input)
+    {
+        $this->input = $input;
+    }
+
     public function check()
     {
-
         try {
             $this->validated->assert($this->input);
         } catch (ValidationException $e) {

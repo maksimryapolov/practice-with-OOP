@@ -139,6 +139,7 @@ class Token
                 return $result;
             } else {
                 // Пользователю надо снова залогиниться
+                $this->delete($refresh);
                 return ['status' => 'fail', 'message' => 'Невалидный токен авторизуйтесь!'];
             }
             throw new \Exception("Invalid token");
