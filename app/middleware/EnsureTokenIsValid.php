@@ -27,16 +27,11 @@ class EnsureTokenIsValid
                 return $next($request, $response);
             }
 
-            $newResponse = $response->withStatus(401)->withJson($userData);
-            $next($request, $newResponse);
-            return $newResponse;
+            return $response->withStatus(401)->withJson($userData);;
         }
 
-        $newResponse = $response->withStatus(401)->withJson(
+        return $response->withStatus(401)->withJson(
             ["error" => ["status" => "fail", "code" => 2, "message" => "Not authorized"]]
         );
-
-        $next($request, $newResponse);
-        return $newResponse;
     }
 }

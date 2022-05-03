@@ -1,10 +1,8 @@
 import React, {useEffect} from "react";
 import {compose} from "redux";
-import {setFields} from "../../../redux/redusers/addRecordsReducer";
 import {connect} from "react-redux";
 import withAuthRedirect from "../../../hoc/withAuthRedirect";
 import Loader from "../../Loader/Loader";
-import {useQuery} from "react-query";
 import {Add} from "./Add";
 import {
     getCategoryVal,
@@ -13,7 +11,7 @@ import {
 } from "./selector";
 import {addCategory} from "../../../redux/redusers/board/segment/categoryReducer";
 import {addAccount} from "../../../redux/redusers/board/segment/accountReducer";
-import {fetchFields, setLoading} from "../../../redux/redusers/addRecordsReducer";
+import {fetchFields, setLoading, updateRecord} from "../../../redux/redusers/addRecordsReducer";
 
 const onSubmit = value => {
     console.log(value);
@@ -28,20 +26,14 @@ const AddContainer = props => {
         account,
         recordType,
         addCategory,
-        addAccount
+        addAccount,
+        updateRecord
     } = props;
 
     useEffect(async () => {
         await fetchFields();
         setLoading(false);
     }, []);
-
-    /*const {data, isLoading, error} = useQuery(
-        'selectedVale',
-        () => {
-            return api.post("/boards/get-field-list")
-        },
-    );*/
 
     if(isLoading) {
         return <Loader />
@@ -56,6 +48,7 @@ const AddContainer = props => {
                 recordType={recordType}
                 addCategory={addCategory}
                 addAccount={addAccount}
+                updateRecord={updateRecord}
             />
         </div>
     )
@@ -71,6 +64,6 @@ const mapStateToProps = state => {
 }
 
 export default compose(
-    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount}),
+    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount, updateRecord}),
     withAuthRedirect
 )(AddContainer);

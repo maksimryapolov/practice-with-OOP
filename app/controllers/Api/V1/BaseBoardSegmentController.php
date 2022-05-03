@@ -15,13 +15,13 @@ class BaseBoardSegmentController
      * @param Response $response
      * @return Response
      */
-    public function set(Request $request, Response $response) :Response
+    public function processing(Request $request, Response $response) :Response
     {
         $result = [];
         $model = '';
         $name = $request->getParam("name");
         $segment = $request->getParam("segment");
-
+        $id = $request->getParam("id");
         $vName = new ValidateString($name);
         if(!$vName->check()) {
             $result["ERROR"]["STATUS"] = !$vName->check();
@@ -33,7 +33,14 @@ class BaseBoardSegmentController
 
         if($model) {
             $category = new $model();
-            $result["id"] = $category->create($name);
+            switch ($request->getMethod()) {
+                case 'POST':
+                    $result["id"] = $category->create($name);
+                    break;
+                case 'PUT':
+                    $result["id"] = $category->update($name, $id);
+                    break;
+            }
             $result["name"] = $name;
             $result["success"]["status"] = true;
             return $response->withJson($result);
@@ -42,7 +49,6 @@ class BaseBoardSegmentController
         $result["ERROR"]["STATUS"] = true;
         $result["ERROR"]["MESSAGE"] = "Не указан метод";
         return $response->withJson($result);
-
     }
 
     /**

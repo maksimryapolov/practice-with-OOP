@@ -48,4 +48,19 @@ class Base
         $st->execute();
         return $db->lastInsertId();
     }
+
+    public function update($name, $id)
+    {
+        $query = "UPDATE {$this->tableName} SET `name`=:name WHERE `id`=:id";
+        $db = (new DB())->getConnection();
+
+        $st = $db->prepare($query);
+        $st->bindParam(":name", $name);
+        $st->bindParam(":id", $id);
+        if($st->execute()) {
+            return $id;
+        }
+        return 0;
+    }
+
 }

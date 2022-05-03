@@ -62,9 +62,17 @@ class Kernel
                 $app->post('/check-register', AuthController::class . ':checkRegister');
             });
 
-            $app->post('/boards', BoardsController::class . ":add")->add(EnsureTokenIsValid::class . ":run");
-            $app->post('/boards/get-field-list', BoardsController::class . ":getFieldsValue")->add(EnsureTokenIsValid::class . ":run");
-            $app->post('/boards/set-record', BaseBoardSegmentController::class . ":set")->add(EnsureTokenIsValid::class . ":run");
+            $app->group('/boards', function (App $app) {
+                $app->post('/', BoardsController::class . ":add");
+                $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
+                $app->group('/record', function (App $app) {
+                    $app->map(['PUT', 'POST'], '/processing', BaseBoardSegmentController::class . ":processing")->add(EnsureTokenIsValid::class . ":run");
+                });
+
+                /*$app->post('/set-record', BaseBoardSegmentController::class . ":set");
+                $app->post('/update-record', BaseBoardSegmentController::class . ":update");*/
+            })->add(EnsureTokenIsValid::class . ":run");
+
 //            $app->post('/boards/type/get', TypyController::class . ":getFieldsValue")->add(EnsureTokenIsValid::class . ":run");
 //            $app->post('/boards/account/get', AccountController::class . ":getFieldsValue")->add(EnsureTokenIsValid::class . ":run");
 

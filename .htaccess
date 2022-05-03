@@ -10,6 +10,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
   Header set Access-Control-Allow-Origin: "http://localhost:3000"
   Header set Access-Control-Allow-Credentials: "true"
   Header set Access-Control-Allow-Headers: "Content-Type, Authorization"
+  Header add Access-Control-Allow-Methods: "GET, POST, OPTIONS, DELETE, PUT"
 </IfModule>
 
 RewriteRule ^(.*)$ index.php

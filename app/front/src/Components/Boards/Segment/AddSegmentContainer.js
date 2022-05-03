@@ -4,24 +4,22 @@ import {connect} from "react-redux";
 import {AddSegment} from "./AddSegment";
 
 const AddSegmentContainer = props => {
-    const {handlerAddRecord} = props;
+    const { handlerProcess, nameValue, id } = props;
     const [isShow, setSow] = useState(false);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(nameValue);
 
     const onChangeShow = () => {
         setSow(!isShow);
     }
 
     const onAdd = async (params) => {
-        await handlerAddRecord(params);
+        await handlerProcess(params);
         setValue('');
         setSow(!isShow);
     }
 
     const onChange = (e) => {
-        if(e.target.value) {
-            setValue(e.target.value)
-        }
+        setValue(e.target.value)
     }
 
     return (
@@ -31,6 +29,7 @@ const AddSegmentContainer = props => {
             onChange={onChange}
             isShow={isShow}
             value={value}
+            id={id}
             {...props}
         />
     );

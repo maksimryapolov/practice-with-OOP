@@ -7,7 +7,13 @@ export const board = {
     },
 
     addNewRecord: async (params) => {
-        const { data } = await api.post("/boards/set-record", { name: params.value,  segment: params.segment });
+        const { data } = await api.post("/boards/record/processing", { name: params.value,  segment: params.segment });
+        return data;
+    },
+
+    updateRecord: async (params) => {
+        console.log(params);
+        const { data } = await api.put("/boards/record/processing", { name: params.value,  segment: params.segment, id: params.id });
         return data;
     }
 }

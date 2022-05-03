@@ -1,9 +1,9 @@
 import React from "react";
-import {SelectorInput} from "./SelctorInput";
 import {Form, Formik, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import AddSegmentContainer from "../Segment/AddSegmentContainer";
 import {addCategory} from "../../../redux/redusers/board/segment/categoryReducer";
+import {RadioButtonBlocks} from "./RadioButton/RadioButtonBlocks";
 
 const initialValues = {
     category: "",
@@ -21,14 +21,14 @@ export const Add = props => {
     const nameCategory = "category";
     const nameAccount = "account";
     const nameType = "recordType";
-
     const {
         onSubmit,
         category,
         account,
         recordType,
         addCategory,
-        addAccount
+        addAccount,
+        updateRecord
     } = props;
 
     return (
@@ -40,43 +40,33 @@ export const Add = props => {
             <Form>
                 <div className="flex mb-10">
                     <div className="flex flex-col flex-1">
-                        <SelectorInput
-                            name={nameCategory}
-                            data={category}
+                        <RadioButtonBlocks
+                            nameSection={nameCategory}
+                            list={category}
                             title={"Категория"}
+                            updateRecord={updateRecord}
+                            addItem={addCategory}
                         />
-                        <ErrorMessage name={nameCategory}>
-                            {
-                                errorMessage => <div>{errorMessage}</div>
-                            }
-                        </ErrorMessage>
-                        <AddSegmentContainer segment={nameCategory} handlerAddRecord={addCategory} />
+                        <AddSegmentContainer segment={nameCategory} handlerProcess={addCategory} nameValue={""} txtBtn="Добавить" />
                     </div>
 
                     <div className="flex flex-col flex-1">
-                    <SelectorInput
-                            name={nameAccount}
-                            data={account}
+                        <RadioButtonBlocks
+                            nameSection={nameAccount}
+                            list={account}
                             title={"Аккаунт"}
+                            updateRecord={updateRecord}
+                            addItem={addAccount}
                         />
-                        <ErrorMessage name={nameAccount}>
-                            {
-                                errorMessage => <div>{errorMessage}</div>
-                            }
-                        </ErrorMessage>
-                        <AddSegmentContainer segment={nameAccount} handlerAddRecord={addAccount}/>
+                        <AddSegmentContainer segment={nameAccount} handlerProcess={addAccount} nameValue={""} txtBtn="Добавить" />
                     </div>
+
                     <div className="flex flex-col flex-1">
-                        <SelectorInput
-                            name={nameType}
-                            data={recordType}
+                        <RadioButtonBlocks
+                            nameSection={nameType}
+                            list={recordType}
                             title={"Тип"}
                         />
-                        <ErrorMessage name={nameType}>
-                            {
-                                errorMessage => <div>{errorMessage}</div>
-                            }
-                        </ErrorMessage>
                     </div>
                 </div>
                 <div className="flex justify-center">
