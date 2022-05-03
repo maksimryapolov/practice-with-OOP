@@ -4,7 +4,7 @@ import {ErrorMessage} from "formik";
 import AddSegmentContainer from "../../Segment/AddSegmentContainer";
 
 export const RadioButtonBlocks = props => {
-    const {nameSection, list, updateRecord, addItem, title} = props;
+    const {nameSection, list, updateRecord, title, updateAllowed} = props;
 
     return (
         <div className="mb-4">
@@ -13,6 +13,7 @@ export const RadioButtonBlocks = props => {
                 data={list}
                 title={title}
                 updateRecord={updateRecord}
+                updateAllowed={updateAllowed}
             />
             <ErrorMessage name={nameSection}>
                 {

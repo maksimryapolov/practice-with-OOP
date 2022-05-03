@@ -5,6 +5,8 @@ import {AddSegment} from "./AddSegment";
 
 const AddSegmentContainer = props => {
     const { handlerProcess, nameValue, id } = props;
+
+    //TODO: Дубль ./Components/Boards/Add/RadioButton/RadioButtonSelf.jsx
     const [isShow, setSow] = useState(false);
     const [value, setValue] = useState(nameValue);
 
@@ -12,15 +14,16 @@ const AddSegmentContainer = props => {
         setSow(!isShow);
     }
 
+    const onChange = (e) => {
+        setValue(e.target.value)
+    }
+
     const onAdd = async (params) => {
         await handlerProcess(params);
         setValue('');
         setSow(!isShow);
     }
-
-    const onChange = (e) => {
-        setValue(e.target.value)
-    }
+    // END
 
     return (
         <AddSegment

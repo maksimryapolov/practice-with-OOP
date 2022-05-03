@@ -41,6 +41,7 @@ export const Add = props => {
                 <div className="flex mb-10">
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
+                            updateAllowed={true}
                             nameSection={nameCategory}
                             list={category}
                             title={"Категория"}
@@ -52,6 +53,7 @@ export const Add = props => {
 
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
+                            updateAllowed={true}
                             nameSection={nameAccount}
                             list={account}
                             title={"Аккаунт"}
@@ -63,6 +65,7 @@ export const Add = props => {
 
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
+                            updateAllowed={false}
                             nameSection={nameType}
                             list={recordType}
                             title={"Тип"}
