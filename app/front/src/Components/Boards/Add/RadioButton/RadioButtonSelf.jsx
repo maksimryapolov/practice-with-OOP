@@ -3,7 +3,7 @@ import {InputField} from "../../InputField/InputField";
 import "./style.css";
 
 export const RadioButtonSelf = props => {
-    const {field, item, id, name, updateRecord, updateAllowed} = props
+    const {field, item, id, name, updateRecord, updateAllowed, deleteRecord, deleteAllowed} = props
     //TODO: Дубль ./Components/Boards/Segment/AddSegmentContainer.js
     const [isShow, setShow] = useState(false);
     const [value, setValue] = useState(item.name);
@@ -20,6 +20,10 @@ export const RadioButtonSelf = props => {
         await updateRecord(params);
         setValue('');
         changeShow();
+    }
+
+    const onDelete = async (params) => {
+        await deleteRecord(params);
     }
     // END
 
@@ -39,9 +43,14 @@ export const RadioButtonSelf = props => {
                             </div>
                             : null
                         }
-                        <div className="flex justify-center items-center w-5 h-5 ml-2 rounded-full shadow-gray-500/50 shadow-md text-red-400 text-xl cursor-pointer hidden radio-button__action">
-                            <div>×</div>
-                        </div>
+                        {
+                            deleteAllowed ?
+                                <div className="flex justify-center items-center w-5 h-5 ml-2 rounded-full shadow-gray-500/50 shadow-md text-red-400 text-xl cursor-pointer hidden radio-button__action"
+                                     onClick={() => { onDelete({id: item.id, segment: name}) }}>
+                                    <div>×</div>
+                                </div>
+                                : null
+                        }
 
                     </div>
                 </>

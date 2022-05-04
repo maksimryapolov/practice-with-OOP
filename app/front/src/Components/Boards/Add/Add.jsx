@@ -28,7 +28,8 @@ export const Add = props => {
         recordType,
         addCategory,
         addAccount,
-        updateRecord
+        updateRecord,
+        deleteRecord
     } = props;
 
     return (
@@ -42,10 +43,12 @@ export const Add = props => {
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
                             updateAllowed={true}
+                            deleteAllowed={true}
                             nameSection={nameCategory}
                             list={category}
                             title={"Категория"}
                             updateRecord={updateRecord}
+                            deleteRecord={deleteRecord}
                             addItem={addCategory}
                         />
                         <AddSegmentContainer segment={nameCategory} handlerProcess={addCategory} nameValue={""} txtBtn="Добавить" />
@@ -54,10 +57,12 @@ export const Add = props => {
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
                             updateAllowed={true}
+                            deleteAllowed={true}
                             nameSection={nameAccount}
                             list={account}
                             title={"Аккаунт"}
                             updateRecord={updateRecord}
+                            deleteRecord={deleteRecord}
                             addItem={addAccount}
                         />
                         <AddSegmentContainer segment={nameAccount} handlerProcess={addAccount} nameValue={""} txtBtn="Добавить" />
@@ -66,6 +71,7 @@ export const Add = props => {
                     <div className="flex flex-col flex-1">
                         <RadioButtonBlocks
                             updateAllowed={false}
+                            deleteAllowed={false}
                             nameSection={nameType}
                             list={recordType}
                             title={"Тип"}

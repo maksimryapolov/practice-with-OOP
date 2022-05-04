@@ -11,45 +11,63 @@ use Slim\Http\Response;
 class BaseBoardSegmentController
 {
     /**
+     * @var array
+     */
+    private $result = [];
+
+    /**
      * @param Request $request
      * @param Response $response
      * @return Response
      */
     public function processing(Request $request, Response $response) :Response
     {
-        $result = [];
         $model = '';
         $name = $request->getParam("name");
         $segment = $request->getParam("segment");
         $id = $request->getParam("id");
-        $vName = new ValidateString($name);
-        if(!$vName->check()) {
-            $result["ERROR"]["STATUS"] = !$vName->check();
-            $result["ERROR"]["MESSAGE"] = $vName->getError();
-            return $response->withJson($result);
-        }
-
         $model = $this->getModel($segment);
 
         if($model) {
             $category = new $model();
             switch ($request->getMethod()) {
                 case 'POST':
-                    $result["id"] = $category->create($name);
+                    if(!$this->checkName($name))
+                        return $response->withJson($this->result);
+                    $this->result["id"] = $category->create($name);
                     break;
                 case 'PUT':
-                    $result["id"] = $category->update($name, $id);
+                    if(!$this->checkName($name))
+                        return $response->withJson($this->result);
+                    $this->result["id"] = $category->update($name, $id);
+                    break;
+                case 'DELETE':
+                    $this->result["id"] = $category->delete($id);
                     break;
             }
-            $result["name"] = $name;
-            $result["success"]["status"] = true;
-            return $response->withJson($result);
+            $this->result["name"] = $name;
+            $this->result["success"]["status"] = true;
+
+            return $response->withJson($this->result);
         }
 
-        $result["ERROR"]["STATUS"] = true;
-        $result["ERROR"]["MESSAGE"] = "Не указан метод";
-        return $response->withJson($result);
+        $this->result["ERROR"]["STATUS"] = true;
+        $this->result["ERROR"]["MESSAGE"] = "Не указан метод";
+        return $response->withJson($this->result);
     }
+
+    private function checkName(string $name) :bool
+    {
+        $vName = new ValidateString($name);
+        if(!$vName->check()) {
+            $this->result["ERROR"]["STATUS"] = !$vName->check();
+            $this->result["ERROR"]["MESSAGE"] = $vName->getError();
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * @param string $table

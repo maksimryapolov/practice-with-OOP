@@ -1,6 +1,6 @@
 import {board} from "../../API/board/board";
-import {setCategories, updateCategories} from "./board/segment/categoryReducer";
-import {setAccounts, updateAccount} from "./board/segment/accountReducer";
+import {deleteCategory, setCategories, updateCategories} from "./board/segment/categoryReducer";
+import {deleteAccount, setAccounts, updateAccount} from "./board/segment/accountReducer";
 import {setTypes} from "./board/segment/recordTypeReducer";
 
 const SET_LOADING = 'addRecordReducer/SET_LOADING';
@@ -41,6 +41,21 @@ export const updateRecord = params => async dispatch => {
                 break;
             case "account":
                 dispatch(updateAccount({id: res.id, name: res.name}))
+                break;
+        }
+
+    }
+}
+
+export const deleteRecord = params => async dispatch => {
+    const res = await board.deleteRecord(params);
+    if(res.success.status) {
+        switch (params.segment) {
+            case "category":
+                dispatch(deleteCategory({id: res.id, name: res.name}))
+                break;
+            case "account":
+                dispatch(deleteAccount({id: res.id, name: res.name}))
                 break;
         }
 

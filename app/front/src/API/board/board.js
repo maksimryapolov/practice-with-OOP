@@ -12,8 +12,12 @@ export const board = {
     },
 
     updateRecord: async (params) => {
-        console.log(params);
         const { data } = await api.put("/boards/record/processing", { name: params.value,  segment: params.segment, id: params.id });
+        return data;
+    },
+
+    deleteRecord: async (params) => {
+        const { data } = await api.delete("/boards/record/processing", { data: {segment: params.segment, id: params.id }});
         return data;
     }
 }

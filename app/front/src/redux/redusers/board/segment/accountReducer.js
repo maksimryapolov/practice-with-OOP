@@ -2,6 +2,7 @@ import {board} from "../../../../API/board/board";
 
 const SET_ACCOUNTS = 'board/segment/accountReducer/UPDATE_ACCOUNTS';
 const UPDATE_ACCOUNTS = 'board/segment/accountReducer/SET_CATEGORIES';
+const DELETE_ACCOUNTS = 'board/segment/accountReducer/DELETE_ACCOUNTS';
 
 const initialState = {
     accounts: [],
@@ -26,6 +27,11 @@ export const accountReducer = (state = initialState, action) => {
                 ...state,
                 accounts: result
             }
+        case(DELETE_ACCOUNTS):
+            return {
+                ...state,
+                accounts: state.accounts.filter((i) => i.id !== action.account.id)
+            }
         default:
             return state;
     }
@@ -33,6 +39,7 @@ export const accountReducer = (state = initialState, action) => {
 
 export const setAccounts = accounts => ({type: SET_ACCOUNTS, accounts});
 export const updateAccount = account => ({type: UPDATE_ACCOUNTS, account});
+export const deleteAccount = account => ({type: DELETE_ACCOUNTS, account});
 
 
 export const addAccount = (params) => async dispatch => {

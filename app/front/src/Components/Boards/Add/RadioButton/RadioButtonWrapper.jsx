@@ -3,7 +3,7 @@ import {Field} from "formik";
 import RadioButtonSelf from "./RadioButtonSelf";
 
 export const RadioButtonWrapper = props => {
-    const {name, data, title, updateRecord, updateAllowed} = props;
+    const {name, data, title, updateRecord, updateAllowed, deleteRecord, deleteAllowed} = props;
 
     return (
         <>
@@ -22,6 +22,8 @@ export const RadioButtonWrapper = props => {
                                                      name={name}
                                                      updateRecord={updateRecord}
                                                      updateAllowed={updateAllowed}
+                                                     deleteRecord={deleteRecord}
+                                                     deleteAllowed={deleteAllowed}
                                     />
                                 )
                             })

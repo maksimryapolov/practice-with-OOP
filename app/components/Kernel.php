@@ -65,8 +65,9 @@ class Kernel
             $app->group('/boards', function (App $app) {
                 $app->post('/', BoardsController::class . ":add");
                 $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
+
                 $app->group('/record', function (App $app) {
-                    $app->map(['PUT', 'POST'], '/processing', BaseBoardSegmentController::class . ":processing")->add(EnsureTokenIsValid::class . ":run");
+                    $app->map(['PUT', 'POST', 'DELETE'], '/processing', BaseBoardSegmentController::class . ":processing");
                 });
 
                 /*$app->post('/set-record', BaseBoardSegmentController::class . ":set");

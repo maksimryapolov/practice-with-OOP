@@ -11,7 +11,7 @@ import {
 } from "./selector";
 import {addCategory} from "../../../redux/redusers/board/segment/categoryReducer";
 import {addAccount} from "../../../redux/redusers/board/segment/accountReducer";
-import {fetchFields, setLoading, updateRecord} from "../../../redux/redusers/addRecordsReducer";
+import {fetchFields, setLoading, updateRecord, deleteRecord} from "../../../redux/redusers/addRecordsReducer";
 
 const onSubmit = value => {
     console.log(value);
@@ -27,7 +27,8 @@ const AddContainer = props => {
         recordType,
         addCategory,
         addAccount,
-        updateRecord
+        updateRecord,
+        deleteRecord
     } = props;
 
     useEffect(async () => {
@@ -49,6 +50,7 @@ const AddContainer = props => {
                 addCategory={addCategory}
                 addAccount={addAccount}
                 updateRecord={updateRecord}
+                deleteRecord={deleteRecord}
             />
         </div>
     )
@@ -64,6 +66,6 @@ const mapStateToProps = state => {
 }
 
 export default compose(
-    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount, updateRecord}),
+    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount, updateRecord, deleteRecord}),
     withAuthRedirect
 )(AddContainer);

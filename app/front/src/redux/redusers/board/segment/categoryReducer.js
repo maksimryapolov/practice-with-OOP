@@ -2,6 +2,7 @@ import {board} from "../../../../API/board/board";
 
 const SET_CATEGORIES = 'board/segment/categoryReducer/SET_CATEGORIES';
 const UPDATE_CATEGORIES = 'board/segment/categoryReducer/UPDATE_CATEGORIES';
+const DELETE_CATEGORY = 'board/segment/categoryReducer/DELETE_CATEGORY';
 
 const initialState = {
     categories: [],
@@ -27,6 +28,11 @@ export const categoryReducer = (state = initialState, action) => {
                 ...state,
                 categories: result
             }
+        case(DELETE_CATEGORY):
+            return {
+                ...state,
+                categories: state.categories.filter((i, idx) => i.id !== action.category.id)
+            };
         default:
             return state;
     }
@@ -34,6 +40,7 @@ export const categoryReducer = (state = initialState, action) => {
 
 export const setCategories = categories => ({type: SET_CATEGORIES, categories});
 export const updateCategories = category => ({type: UPDATE_CATEGORIES, category});
+export const deleteCategory = category => ({type: DELETE_CATEGORY, category});
 
 export const addCategory = (params) => async dispatch => {
     const res = await board.addNewRecord(params);
