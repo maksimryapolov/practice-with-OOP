@@ -1,27 +1,12 @@
 import React, {useState} from "react";
 import {InputField} from "../../InputField/InputField";
 import "./style.css";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {withSegmentInput} from "../../../../hoc/withSegmentInput";
 
 export const RadioButtonSelf = props => {
-    const {field, item, id, name, updateRecord, updateAllowed, deleteRecord, deleteAllowed} = props
-    //TODO: Дубль ./Components/Boards/Segment/AddSegmentContainer.js
-    const [isShow, setShow] = useState(false);
-    const [value, setValue] = useState(item.name);
-
-    const changeShow = () => {
-        setShow(!isShow);
-    }
-
-    const onChange = (e) => {
-        setValue(e.target.value)
-    }
-
-    const onUpdate = async (params) => {
-        await updateRecord(params);
-        setValue('');
-        changeShow();
-    }
-
+    const {field, item, id, name, handlerProcess, updateAllowed, deleteRecord, deleteAllowed, isShow, onChangeShow, onChange, value, onProcess} = props
     const onDelete = async (params) => {
         await deleteRecord(params);
     }
@@ -37,7 +22,7 @@ export const RadioButtonSelf = props => {
                         {updateAllowed ?
                             <div
                                 className="w-5 h-5 ml-5 rounded-full shadow-gray-500/50 shadow-md text-indigo-500 text-center text-xs flex justify-center items-center cursor-pointer hidden radio-button__action"
-                                onClick={changeShow}
+                                onClick={onChangeShow}
                             >
                                 <div>🖊</div>
                             </div>
@@ -60,12 +45,15 @@ export const RadioButtonSelf = props => {
                     onChange={onChange}
                     segment={name}
                     id={item.id}
-                    changeShow={changeShow}
-                    processHandler={onUpdate}
+                    changeShow={onChangeShow}
+                    processHandler={onProcess}
                 />
             </>)}
         </div>
     );
 }
 
-export default RadioButtonSelf;
+export default compose(
+    connect(null, null),
+    withSegmentInput
+)(RadioButtonSelf);

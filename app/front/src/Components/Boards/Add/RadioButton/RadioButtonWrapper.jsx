@@ -15,15 +15,16 @@ export const RadioButtonWrapper = props => {
                             return data.map((item, idx) => {
                                 const id = `${name}-${item.id}`;
                                 return (
-                                    <RadioButtonSelf key={idx}
-                                                     field={field}
-                                                     item={item}
-                                                     id={id}
-                                                     name={name}
-                                                     updateRecord={updateRecord}
-                                                     updateAllowed={updateAllowed}
-                                                     deleteRecord={deleteRecord}
-                                                     deleteAllowed={deleteAllowed}
+                                    <RadioButtonSelf
+                                        key={idx}
+                                        field={field}
+                                        item={item}
+                                        id={id}
+                                        name={name}
+                                        handlerProcess={updateRecord}
+                                        updateAllowed={updateAllowed}
+                                        deleteRecord={deleteRecord}
+                                        deleteAllowed={deleteAllowed}
                                     />
                                 )
                             })

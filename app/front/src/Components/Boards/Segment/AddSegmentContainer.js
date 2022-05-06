@@ -2,42 +2,26 @@ import React, {useState} from "react";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {AddSegment} from "./AddSegment";
+import {withSegmentInput} from "../../../hoc/withSegmentInput";
 
 const AddSegmentContainer = props => {
-    const { handlerProcess, nameValue, id } = props;
-
-    //TODO: Дубль ./Components/Boards/Add/RadioButton/RadioButtonSelf.jsx
-    const [isShow, setSow] = useState(false);
-    const [value, setValue] = useState(nameValue);
-
-    const onChangeShow = () => {
-        setSow(!isShow);
-    }
-
-    const onChange = (e) => {
-        setValue(e.target.value)
-    }
-
-    const onAdd = async (params) => {
-        await handlerProcess(params);
-        setValue('');
-        setSow(!isShow);
-    }
-    // END
+    const { nameValue, segment, txtBtn, onChangeShow, onProcess, onChange, isShow, value } = props;
 
     return (
         <AddSegment
             onChangeShow={onChangeShow}
-            onAdd={onAdd}
+            onProcess={onProcess}
             onChange={onChange}
             isShow={isShow}
             value={value}
-            id={id}
-            {...props}
+            nameValue={nameValue}
+            segment={segment}
+            txtBtn={txtBtn}
         />
     );
 }
 
 export default compose(
-    connect(null, null)
+    connect(null, null),
+    withSegmentInput
 )(AddSegmentContainer);

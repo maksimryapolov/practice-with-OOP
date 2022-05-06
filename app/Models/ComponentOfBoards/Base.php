@@ -63,4 +63,21 @@ class Base
         return 0;
     }
 
+    public function delete($id)
+    {
+        $id = (int)$id;
+        if($id) {
+            $query = "DELETE FROM {$this->tableName} WHERE id = :id";
+            $db = (new DB)->getConnection();
+
+            $st = $db->prepare($query);
+            $st->bindParam("id", $id);
+            if($st->execute()) {
+                return $id;
+            }
+        }
+
+        return 0;
+    }
+
 }

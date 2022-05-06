@@ -5,12 +5,11 @@ export const AddSegment = props => {
     const {
         segment,
         onChangeShow,
-        onAdd,
+        onProcess,
         isShow,
         value,
         onChange,
         txtBtn,
-        id,
     } = props;
 
     return (
@@ -20,10 +19,8 @@ export const AddSegment = props => {
                         value={value}
                         onChange={onChange}
                         segment={segment}
-                        id={id}
                         changeShow={onChangeShow}
-                        processHandler={onAdd}
-
+                        processHandler={onProcess}
                     />
                  )
                 :(

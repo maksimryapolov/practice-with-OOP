@@ -51,7 +51,7 @@ export const Add = props => {
                             deleteRecord={deleteRecord}
                             addItem={addCategory}
                         />
-                        <AddSegmentContainer segment={nameCategory} handlerProcess={addCategory} nameValue={""} txtBtn="Добавить" />
+                        <AddSegmentContainer segment={nameCategory} handlerProcess={addCategory} txtBtn="Добавить" />
                     </div>
 
                     <div className="flex flex-col flex-1">
@@ -65,7 +65,7 @@ export const Add = props => {
                             deleteRecord={deleteRecord}
                             addItem={addAccount}
                         />
-                        <AddSegmentContainer segment={nameAccount} handlerProcess={addAccount} nameValue={""} txtBtn="Добавить" />
+                        <AddSegmentContainer segment={nameAccount} handlerProcess={addAccount} txtBtn="Добавить" />
                     </div>
 
                     <div className="flex flex-col flex-1">

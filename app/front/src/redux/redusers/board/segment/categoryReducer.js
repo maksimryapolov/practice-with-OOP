@@ -11,7 +11,6 @@ const initialState = {
 export const categoryReducer = (state = initialState, action) => {
     switch (action.type) {
         case(SET_CATEGORIES):
-            console.log(action.categories);
             return {
                 ...state,
                 categories: [...state.categories, ...action.categories]
