@@ -10,6 +10,7 @@ export const AddSegment = props => {
         value,
         onChange,
         txtBtn,
+        typeId
     } = props;
 
     return (
@@ -21,6 +22,7 @@ export const AddSegment = props => {
                         segment={segment}
                         changeShow={onChangeShow}
                         processHandler={onProcess}
+                        typeId={typeId}
                     />
                  )
                 :(

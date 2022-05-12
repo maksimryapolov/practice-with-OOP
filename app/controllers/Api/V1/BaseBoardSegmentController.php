@@ -26,6 +26,7 @@ class BaseBoardSegmentController
         $name = $request->getParam("name");
         $segment = $request->getParam("segment");
         $id = $request->getParam("id");
+        $typeId = $request->getParam("typeId");
         $model = $this->getModel($segment);
 
         if($model) {
@@ -34,7 +35,7 @@ class BaseBoardSegmentController
                 case 'POST':
                     if(!$this->checkName($name))
                         return $response->withJson($this->result);
-                    $this->result["id"] = $category->create($name);
+                    $this->result["id"] = $category->create($name, $typeId);
                     break;
                 case 'PUT':
                     if(!$this->checkName($name))
@@ -46,6 +47,11 @@ class BaseBoardSegmentController
                     break;
             }
             $this->result["name"] = $name;
+
+            if($typeId) {
+                $this->result["typeId"] = $typeId;
+            }
+
             $this->result["success"]["status"] = true;
 
             return $response->withJson($this->result);

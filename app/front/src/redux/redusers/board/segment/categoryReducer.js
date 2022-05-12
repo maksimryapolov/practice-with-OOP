@@ -19,10 +19,8 @@ export const categoryReducer = (state = initialState, action) => {
             let result = state.categories.map((i) => {
                 if(i.id === action.category.id)
                     return action.category;
-
                 return i;
             });
-
             return {
                 ...state,
                 categories: result
@@ -44,15 +42,6 @@ export const deleteCategory = category => ({type: DELETE_CATEGORY, category});
 export const addCategory = (params) => async dispatch => {
     const res = await board.addNewRecord(params);
     if(res.success.status) {
-        dispatch(setCategories([{id: res.id, name: res.name}]))
+        dispatch(setCategories([{id: res.id, name: res.name, type_id: res.typeId}]))
     }
 }
-
-/*
-export const updateRecord = params => async dispatch => {
-    const res = await board.updateRecord(params);
-    if(res.success.status) {
-        dispatch(updateCategories({id: res.id, name: res.name}))
-    }
-}
-*/

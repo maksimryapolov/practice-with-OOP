@@ -37,13 +37,12 @@ export const updateRecord = params => async dispatch => {
     if(res.success.status) {
         switch (params.segment) {
             case "category":
-                dispatch(updateCategories({id: res.id, name: res.name}))
+                dispatch(updateCategories({id: res.id, name: res.name, type_id: res.typeId}))
                 break;
             case "account":
                 dispatch(updateAccount({id: res.id, name: res.name}))
                 break;
         }
-
     }
 }
 

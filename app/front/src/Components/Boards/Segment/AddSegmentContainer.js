@@ -5,7 +5,7 @@ import {AddSegment} from "./AddSegment";
 import {withSegmentInput} from "../../../hoc/withSegmentInput";
 
 const AddSegmentContainer = props => {
-    const { nameValue, segment, txtBtn, onChangeShow, onProcess, onChange, isShow, value } = props;
+    const { nameValue, segment, txtBtn, onChangeShow, onProcess, onChange, isShow, value, typeId } = props;
 
     return (
         <AddSegment
@@ -17,6 +17,7 @@ const AddSegmentContainer = props => {
             nameValue={nameValue}
             segment={segment}
             txtBtn={txtBtn}
+            typeId={typeId}
         />
     );
 }

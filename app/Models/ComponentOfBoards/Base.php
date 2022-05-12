@@ -38,7 +38,7 @@ class Base
         return $result;
     }
 
-    public function create($name)
+    public function create($name, $typeId = 0)
     {
         $query = "INSERT INTO {$this->tableName}(`name`) VALUES (:name)";
         $db = (new DB())->getConnection();

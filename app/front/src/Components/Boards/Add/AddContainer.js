@@ -5,12 +5,14 @@ import withAuthRedirect from "../../../hoc/withAuthRedirect";
 import Loader from "../../Loader/Loader";
 import {Add} from "./Add";
 import {
-    getCategoryVal,
     getAccountVal,
-    getRecordTypeVal
+    getRecordTypeVal,
+    getCurTab,
+    getCurCategoryVal
 } from "./selector";
 import {addCategory} from "../../../redux/redusers/board/segment/categoryReducer";
 import {addAccount} from "../../../redux/redusers/board/segment/accountReducer";
+import {setCurTab} from "../../../redux/redusers/board/segment/recordTypeReducer";
 import {fetchFields, setLoading, updateRecord, deleteRecord} from "../../../redux/redusers/addRecordsReducer";
 
 const onSubmit = value => {
@@ -28,7 +30,9 @@ const AddContainer = props => {
         addCategory,
         addAccount,
         updateRecord,
-        deleteRecord
+        deleteRecord,
+        setCurTab,
+        curTab
     } = props;
 
     useEffect(async () => {
@@ -51,6 +55,8 @@ const AddContainer = props => {
                 addAccount={addAccount}
                 updateRecord={updateRecord}
                 deleteRecord={deleteRecord}
+                setCurTab={setCurTab}
+                curTab={curTab}
             />
         </div>
     )
@@ -58,14 +64,16 @@ const AddContainer = props => {
 
 const mapStateToProps = state => {
     return {
-        category: getCategoryVal(state),
+        category: getCurCategoryVal(state),
         account: getAccountVal(state),
         recordType: getRecordTypeVal(state),
+        curTab: getCurTab(state),
+        test: getCurCategoryVal(state),
         isLoading: state.addRecords.isLoading
     };
 }
 
 export default compose(
-    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount, updateRecord, deleteRecord}),
+    connect( mapStateToProps, {fetchFields, setLoading, addCategory, addAccount, updateRecord, deleteRecord, setCurTab}),
     withAuthRedirect
 )(AddContainer);

@@ -18,14 +18,20 @@ class Category extends Base
         return parent::getListIdRecords();
     }
 
-/*    public function create($name)
+    public function create($name, $typeId = 0)
     {
-        $query = "INSERT INTO {$this->tableName}(`name`) VALUES (:name)";
-        $db = (new DB())->getConnection();
+        $typeId = (int)$typeId;
 
-        $st = $db->prepare($query);
-        $st->bindParam(":name", $name);
-        $st->execute();
-        return $db->lastInsertId();
-    }*/
+        if($typeId && $name) {
+            $query = "INSERT INTO {$this->tableName}(`name`, `type_id`) VALUES (:name, :type_id)";
+            $db = (new DB())->getConnection();
+
+            $st = $db->prepare($query);
+            $st->bindParam(":name", $name);
+            $st->bindParam(":type_id", $typeId);
+            $st->execute();
+            return $db->lastInsertId();
+        }
+        return 0;
+    }
 }
