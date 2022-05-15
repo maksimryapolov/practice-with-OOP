@@ -8,11 +8,11 @@ const intialState = {
     user: {
         name: "",
         email: "",
+        id: ""
     },
     isAuth: false,
     loading: false,
     errorsMsg: [],
-    txt: "123"
 };
 
 export const authReducer = (state = intialState, action) => {
@@ -24,6 +24,7 @@ export const authReducer = (state = intialState, action) => {
                     ...state.user,
                     email: action.data.email,
                     name: action.data.name,
+                    id: action.data.id,
                 },
                 isAuth: action.data.auth,
             };
@@ -76,11 +77,13 @@ export const logout = () => async dispatch => {
 
 export const checkAuth = () => async dispatch => {
     let result = await authenticate.check();
+
     if(result) {
         dispatch(
             setUserData({
                 email: result.user.email,
                 name: result.user.username,
+                id: result.user.id,
                 auth: true
             })
         );

@@ -1,6 +1,21 @@
 import {api} from "../instance";
 
 export const board = {
+    addBoard: async (params) => {
+        const data = await api.post("/boards/add",
+            {
+                date: params.date,
+                time: params.time,
+                amount: params.amount,
+                recordType: params.recordType,
+                account: params.account,
+                category: params.category
+            }
+        );
+
+        return  data.data.result;
+    },
+
     getFields: async () => {
         const {data} = await api.post("/boards/get-field-list");
         return data;

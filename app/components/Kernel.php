@@ -63,7 +63,7 @@ class Kernel
             });
 
             $app->group('/boards', function (App $app) {
-                $app->post('/', BoardsController::class . ":add");
+                $app->post('/add', BoardsController::class . ":add");
                 $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
 
                 $app->group('/record', function (App $app) {
