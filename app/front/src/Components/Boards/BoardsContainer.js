@@ -1,23 +1,27 @@
-import React from "react";
-import {useQuery} from "react-query";
-import axios from "axios";
-import {NavLink, Routes, Route, Outlet} from "react-router-dom";
+import React, {useEffect} from "react";
+import { Boards } from "./Boards";
+import {connect} from "react-redux";
+import {getTypesAction} from "../../redux/redusers/board/boardReducer";
+import {getTypes, getTotal} from "./selector";
 
-const sendCheckUserName = ({ queryKey }) => {
-    const email = queryKey[1];
-    return axios.post('http://localhost/api/user/check-email', {email});
-}
-
-export const BoardsContainer = props => {
-
-    /* useQuery(
-        ['username'],
-        sendCheckUserName,
-    );*/
+const BoardsContainer = ({ getTypesAction, typesAction, total }) => {
+    useEffect(() => {
+        getTypesAction();
+    }, [])
 
     return (
-        <>
-            Список
-        </>
+        <Boards
+            typesAction={typesAction}
+            total={total}
+        />
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        typesAction: getTypes(state),
+        total: getTotal(state)
+    }
+}
+
+export default connect(mapStateToProps, {getTypesAction})(BoardsContainer);

@@ -42,5 +42,10 @@ export const board = {
     deleteRecord: async (params) => {
         const { data } = await api.delete("/boards/record/processing", { data: {segment: params.segment, id: params.id }});
         return data;
+    },
+
+    getTypes: async () => {
+        const {data} = await api.post("/boards/get-types-action");
+        return data;
     }
 }

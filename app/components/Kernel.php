@@ -7,9 +7,9 @@ use App\controllers\Api\V1\BoardsController;
 use App\controllers\Api\V1\BaseBoardSegmentController;
 use App\controllers\Api\V1\TokenController;
 use App\controllers\Api\V1\AuthController;
+use App\controllers\Api\V1\TypeOfActionController;
 use App\controllers\Api\V1\UsersController;
 use App\middleware\EnsureTokenIsValid;
-use App\Models\User;
 use Slim\App;
 use Slim\Container;
 
@@ -65,6 +65,7 @@ class Kernel
             $app->group('/boards', function (App $app) {
                 $app->post('/add', BoardsController::class . ":add");
                 $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
+                $app->post('/get-types-action', TypeOfActionController::class . ":getList");
 
                 $app->group('/record', function (App $app) {
                     $app->map(['PUT', 'POST', 'DELETE'], '/processing', BaseBoardSegmentController::class . ":processing");
