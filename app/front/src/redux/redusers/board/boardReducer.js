@@ -1,14 +1,20 @@
 import {board} from "../../../API/board/board";
+import date from "date-and-time";
 
 const ADD_BOARD = 'board/boardReducer/ADD_BOARD';
 const SET_STATUS_ADDING = 'board/boardReducer/SET_STATUS_ADDING';
 const SET_TYPES_ACTION = 'board/boardReducer/SET_TYPES_ACTION';
+const SET_CUR_DATE = 'board/boardReducer/SET_CUR_DATE';
+const SET_ACTIVE_TYPE = 'board/boardReducer/SET_ACTIVE_TYPE';
+const SET_TOTAL = 'board/boardReducer/SET_TOTAL';
 
 const initialState = {
     cards: [],
     typesAction: [],
     isAdding: false,
-    total: 0
+    total: 0,
+    curDate: date.format(new Date(), "MM.YYYY"),
+    activeType: 0
 };
 
 export const boardReducer = (state = initialState, action) => {
@@ -16,6 +22,7 @@ export const boardReducer = (state = initialState, action) => {
         case(ADD_BOARD):
             return {
                 ...state,
+                cards: action.board
             }
         case(SET_STATUS_ADDING):
             return {
@@ -27,6 +34,21 @@ export const boardReducer = (state = initialState, action) => {
                 ...state,
                 typesAction: action.types
             }
+        case(SET_CUR_DATE):
+            return {
+                ...state,
+                curDate: action.date
+            }
+        case(SET_ACTIVE_TYPE):
+            return {
+                ...state,
+                activeType: action.typeId
+            }
+        case(SET_TOTAL):
+            return {
+                ...state,
+                total: action.total
+            }
         default:
             return state;
     }
@@ -35,10 +57,15 @@ export const boardReducer = (state = initialState, action) => {
 export const addBoard = board => ({type: ADD_BOARD, board});
 export const setStatusAdding = status => ({type: SET_STATUS_ADDING, status});
 export const setTypesAction = types => ({type: SET_TYPES_ACTION, types});
+export const setTotal = total => ({type: SET_TOTAL, total});
 
 export const getTypesAction = () => async dispatch => {
     const res = await board.getTypes();
     if(res.success) {
+
+        if(res.data && res.data[0].id > 0) {
+            await dispatch(setActiveType(res.data[0].id))
+        }
         dispatch(setTypesAction(res.data))
     }
 }
@@ -49,3 +76,14 @@ export const creatBoard = (params) => async dispatch => {
         dispatch(setStatusAdding(true))
     }
 }
+
+export const getCards = params => async dispatch => {
+    const res = await board.getCards(params);
+    if(res.success) {
+        dispatch(addBoard(res.data.elements));
+        dispatch(setTotal(res.data.total));
+    }
+}
+
+export const setCurDate = (date) => ({type: SET_CUR_DATE, date});
+export const setActiveType = (typeId) => ({type: SET_ACTIVE_TYPE, typeId});

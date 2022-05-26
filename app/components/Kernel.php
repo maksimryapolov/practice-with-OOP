@@ -64,6 +64,7 @@ class Kernel
 
             $app->group('/boards', function (App $app) {
                 $app->post('/add', BoardsController::class . ":add");
+                $app->post('/get', BoardsController::class . ":get");
                 $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
                 $app->post('/get-types-action', TypeOfActionController::class . ":getList");
 

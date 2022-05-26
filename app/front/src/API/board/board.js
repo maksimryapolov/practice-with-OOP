@@ -44,6 +44,11 @@ export const board = {
         return data;
     },
 
+    getCards: async params => {
+        const {data} = await api.post("/boards/get", params);
+        return data;
+    },
+
     getTypes: async () => {
         const {data} = await api.post("/boards/get-types-action");
         return data;

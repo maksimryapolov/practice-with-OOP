@@ -88,7 +88,8 @@ class BoardsController extends BaseController
             if(!$result['error']['status']) {
                 $board = new Board();
                 $result["result"]["id"] = $board->create([
-                    "date" => $date . " " . $time,
+                    "date" => $date,
+                    "time" => $time,
                     "account" => (int)$accountID,
                     "category" => (int)$categoryID,
                     "amount" => $amount,
@@ -101,6 +102,31 @@ class BoardsController extends BaseController
 
         return $response->withJson($result);
     }
+
+    public function get(Request $request, Response $response)
+    {
+        $date = [];
+        $result = [];
+
+        $date['month'] = $request->getParam("month") ?? date("m");
+        $date['year'] = $request->getParam("year") ?? date("Y");
+        $type = (int)$request->getParam("type") && 1;
+
+        // more validation...
+        /*
+            "success" => true,
+            "data" => $accounts,
+            "message" => "",
+            "code" => 0
+         * */
+        $result['data'] = (new Board())->get($date, $type);
+        $result['success'] = true;
+        $result['message'] = "";
+        $result['code'] = 0;
+
+        return $response->withJson($result);
+    }
+
 
     private function getDateFormat() :string
     {

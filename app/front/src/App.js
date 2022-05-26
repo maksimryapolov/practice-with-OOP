@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import Loader from "./Components/Loader/Loader";
 import { setInitialData } from "./redux/redusers/appReducer";
 import RegisterContainer from "./Components/User/Register/RegisterContainer";
-import {BoardsContainer} from "./Components/Boards/BoardsContainer";
+import BoardsContainer from "./Components/Boards/BoardsContainer";
 import AddContainer from "./Components/Boards/Add/AddContainer";
 
 function App({ loading, setInitialData }) {
