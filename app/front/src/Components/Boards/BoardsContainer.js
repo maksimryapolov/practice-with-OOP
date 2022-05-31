@@ -3,11 +3,18 @@ import { Boards } from "./Boards";
 import {connect} from "react-redux";
 import {getTypesAction, setCurDate, getCards} from "../../redux/redusers/board/boardReducer";
 import {getTypes, getTotal, getCurMonth, getActiveType, getCards as getCardsSelector} from "./selector";
+import {setCurTab} from "../../redux/redusers/board/segment/recordTypeReducer";
 
-const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeType, getCards, cards }) => {
+const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeType, getCards, cards, setCurTab }) => {
     useEffect(async () => {
         await getTypesAction();
     }, []);
+
+    useEffect(async () => {
+        if(typesAction.length) {
+            await setCurTab(typesAction[0].id)
+        }
+    }, [JSON.stringify(typesAction)]);
 
     useEffect( () => {
         if(activeType > 0) {
@@ -16,6 +23,12 @@ const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeTy
             getCards({month, year, type: activeType});
         }
     }, [activeType]);
+
+    const setTab = (id) => {
+        if(id) {
+            setCurTab(id)
+        }
+    }
 
     const setDate = (date) => {
         setCurDate(date);
@@ -27,6 +40,8 @@ const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeTy
             total={total}
             curDate={curDate}
             cards={cards}
+            activeType={activeType}
+            setTab={setTab}
         />
     )
 }
@@ -34,11 +49,11 @@ const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeTy
 const mapStateToProps = (state) => {
     return {
         cards: getCardsSelector(state),
-        typesAction: getTypes(state),
         total: getTotal(state),
         curDate: getCurMonth(state),
+        typesAction: getTypes(state),
         activeType: getActiveType(state)
     }
 }
 
-export default connect(mapStateToProps, {getTypesAction, getCards})(BoardsContainer);
+export default connect(mapStateToProps, {getTypesAction, getCards, setCurTab})(BoardsContainer);

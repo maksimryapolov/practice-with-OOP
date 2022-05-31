@@ -1,11 +1,11 @@
 import {board} from "../../../API/board/board";
 import date from "date-and-time";
+import {setCurTab, setTypes} from "./segment/recordTypeReducer";
 
 const ADD_BOARD = 'board/boardReducer/ADD_BOARD';
 const SET_STATUS_ADDING = 'board/boardReducer/SET_STATUS_ADDING';
 const SET_TYPES_ACTION = 'board/boardReducer/SET_TYPES_ACTION';
 const SET_CUR_DATE = 'board/boardReducer/SET_CUR_DATE';
-const SET_ACTIVE_TYPE = 'board/boardReducer/SET_ACTIVE_TYPE';
 const SET_TOTAL = 'board/boardReducer/SET_TOTAL';
 
 const initialState = {
@@ -39,11 +39,6 @@ export const boardReducer = (state = initialState, action) => {
                 ...state,
                 curDate: action.date
             }
-        case(SET_ACTIVE_TYPE):
-            return {
-                ...state,
-                activeType: action.typeId
-            }
         case(SET_TOTAL):
             return {
                 ...state,
@@ -62,11 +57,10 @@ export const setTotal = total => ({type: SET_TOTAL, total});
 export const getTypesAction = () => async dispatch => {
     const res = await board.getTypes();
     if(res.success) {
-
         if(res.data && res.data[0].id > 0) {
-            await dispatch(setActiveType(res.data[0].id))
+            await dispatch(setCurTab(res.data[0].id))
         }
-        dispatch(setTypesAction(res.data))
+        dispatch(setTypes(res.data));
     }
 }
 
@@ -86,4 +80,3 @@ export const getCards = params => async dispatch => {
 }
 
 export const setCurDate = (date) => ({type: SET_CUR_DATE, date});
-export const setActiveType = (typeId) => ({type: SET_ACTIVE_TYPE, typeId});

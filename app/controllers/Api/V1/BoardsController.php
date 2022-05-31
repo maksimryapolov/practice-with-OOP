@@ -110,7 +110,7 @@ class BoardsController extends BaseController
 
         $date['month'] = $request->getParam("month") ?? date("m");
         $date['year'] = $request->getParam("year") ?? date("Y");
-        $type = (int)$request->getParam("type") && 1;
+        $type = (int)$request->getParam("type") ?? 1;
 
         // more validation...
         /*
