@@ -3,10 +3,10 @@ import { BoardsWrapper } from "./BoardsWrapper";
 import { BoardsInfo } from "./BoardsInfo";
 import { BoardsSelectDate } from "./BoardsSelectDate";
 
-export const Boards = ({ typesAction, total, curDate, cards, activeType, setTab }) => {
+export const Boards = ({ typesAction, total, curDate, cards, activeType, setTab, setDate }) => {
     return (
         <>
-            <BoardsSelectDate curDate={curDate} />
+            <BoardsSelectDate curDate={curDate} setDate={setDate} />
             <BoardsInfo typesAction={typesAction} total={total} activeType={activeType} setTab={setTab} />
             <BoardsWrapper cards={cards}/>
         </>

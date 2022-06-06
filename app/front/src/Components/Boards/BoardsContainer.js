@@ -5,7 +5,7 @@ import {getTypesAction, setCurDate, getCards} from "../../redux/redusers/board/b
 import {getTypes, getTotal, getCurMonth, getActiveType, getCards as getCardsSelector} from "./selector";
 import {setCurTab} from "../../redux/redusers/board/segment/recordTypeReducer";
 
-const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeType, getCards, cards, setCurTab }) => {
+const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeType, getCards, cards, setCurTab, setCurDate }) => {
     useEffect(async () => {
         await getTypesAction();
     }, []);
@@ -22,7 +22,7 @@ const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeTy
             const year = curDate.split('.')[1];
             getCards({month, year, type: activeType});
         }
-    }, [activeType]);
+    }, [activeType, curDate]);
 
     const setTab = (id) => {
         if(id) {
@@ -42,6 +42,7 @@ const BoardsContainer = ({ getTypesAction, typesAction, total, curDate, activeTy
             cards={cards}
             activeType={activeType}
             setTab={setTab}
+            setDate={setDate}
         />
     )
 }
@@ -56,4 +57,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {getTypesAction, getCards, setCurTab})(BoardsContainer);
+export default connect(mapStateToProps, {getTypesAction, getCards, setCurTab, setCurDate})(BoardsContainer);
