@@ -10,7 +10,6 @@ import { categoryReducer } from "./redusers/board/segment/categoryReducer";
 import { accountReducer } from "./redusers/board/segment/accountReducer";
 import { recordTypeReducer } from "./redusers/board/segment/recordTypeReducer";
 import { boardReducer } from "./redusers/board/boardReducer";
-import { paginationReducer } from "./redusers/paginationReducer";
 
 let reducers = combineReducers({
     mainPage: cardsReduser,
@@ -22,8 +21,7 @@ let reducers = combineReducers({
     addRecords: addRecordReducer,
     categoryBoard: categoryReducer,
     accountsBoard: accountReducer,
-    typesBoard: recordTypeReducer,
-    pagination: paginationReducer
+    typesBoard: recordTypeReducer
 });
 
 let store = createStore(reducers, applyMiddleware(thunkMiddleware));
