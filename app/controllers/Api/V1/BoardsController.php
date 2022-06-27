@@ -112,13 +112,19 @@ class BoardsController extends BaseController
         $date['year'] = $request->getParam("year") ?? date("Y");
         $type = (int)$request->getParam("type") ?? 1;
 
-        // more validation...
+        $date['limit'] = $request->getParam("limit") ?? 2;
+        $date['page'] = $request->getParam("page") ?? 1;
+
+        $date['offset'] = ceil($date['limit'] * $date['page'] - $date['limit']);
+
+        //TODO: more validation...
         /*
             "success" => true,
             "data" => $accounts,
             "message" => "",
             "code" => 0
          * */
+
         $result['data'] = (new Board())->get($date, $type);
         $result['success'] = true;
         $result['message'] = "";
@@ -126,7 +132,6 @@ class BoardsController extends BaseController
 
         return $response->withJson($result);
     }
-
 
     private function getDateFormat() :string
     {
@@ -145,5 +150,17 @@ class BoardsController extends BaseController
             "recordType" => (new TypeRecords)->getListIdRecords(),
             "account" => (new Account())->getListIdRecords()
         ]);
+    }
+
+    public function getPages(Request $request, Response $response)
+    {
+        $showCount = $request->getParam("show-count") ?? 2;
+        $typeId = $request->getParam("activeType") ?? 1;
+        $month = $request->getParam("month") ?? date("m");
+        $year = $request->getParam("year") ?? date("Y");
+
+        $allRow = (new Board())->getRowCount($year, $month, $typeId);
+        $allPages = round($allRow / $showCount);
+        return $response->withJson(["allPages" => $allPages]);
     }
 }

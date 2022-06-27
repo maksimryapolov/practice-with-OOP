@@ -52,5 +52,9 @@ export const board = {
     getTypes: async () => {
         const {data} = await api.post("/boards/get-types-action");
         return data;
+    },
+    getAllPages: async activeType => {
+        const {data} = await api.post("/boards/get-pages", { activeType });
+        return data;
     }
 }

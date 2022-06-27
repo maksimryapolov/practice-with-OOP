@@ -5,6 +5,7 @@ namespace App\components;
 
 use App\controllers\Api\V1\BoardsController;
 use App\controllers\Api\V1\BaseBoardSegmentController;
+use App\controllers\Api\V1\TestController;
 use App\controllers\Api\V1\TokenController;
 use App\controllers\Api\V1\AuthController;
 use App\controllers\Api\V1\TypeOfActionController;
@@ -67,6 +68,7 @@ class Kernel
                 $app->post('/get', BoardsController::class . ":get");
                 $app->post('/get-field-list', BoardsController::class . ":getFieldsValue");
                 $app->post('/get-types-action', TypeOfActionController::class . ":getList");
+                $app->post('/get-pages', BoardsController::class . ":getPages");
 
                 $app->group('/record', function (App $app) {
                     $app->map(['PUT', 'POST', 'DELETE'], '/processing', BaseBoardSegmentController::class . ":processing");
@@ -75,7 +77,7 @@ class Kernel
                 /*$app->post('/set-record', BaseBoardSegmentController::class . ":set");
                 $app->post('/update-record', BaseBoardSegmentController::class . ":update");*/
             })->add(EnsureTokenIsValid::class . ":run");
-
+            $app->get("/teest", BoardsController::class . ":getPages");
 //            $app->post('/boards/type/get', TypyController::class . ":getFieldsValue")->add(EnsureTokenIsValid::class . ":run");
 //            $app->post('/boards/account/get', AccountController::class . ":getFieldsValue")->add(EnsureTokenIsValid::class . ":run");
 
