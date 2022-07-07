@@ -1,5 +1,5 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import s from "./header.module.css";
 import logo from "../../assets/img/bill.png";
@@ -16,9 +16,12 @@ function Header (props) {
                 </h1>
             </div>
             <div>
-                <ul>
+                <ul className="flex">
+                    <li className="mr-10">
+                        <NavLink to="/boards">Записи</NavLink>
+                    </li>
                     <li>
-                        <NavLink to="/users">Список пользователей</NavLink>
+                        <NavLink to="/boards/add">Добавть запись</NavLink>
                     </li>
                 </ul>
             </div>

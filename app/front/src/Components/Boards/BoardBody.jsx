@@ -1,5 +1,6 @@
 import React from "react";
 import { BoardRowBody } from "./BoardRowBody";
+import { BoardRowBodyLink } from "./BoardRowBodyLink";
 
 export const BoardBody = ({ item }) => {
     const trClassName = "border-b border-gray-200 ";
@@ -10,6 +11,7 @@ export const BoardBody = ({ item }) => {
                 <BoardRowBody str={item.category_name} />
                 <BoardRowBody str={item.account_name} />
                 <BoardRowBody str={`${item.deposit_amount}  ₽`} />
+                <BoardRowBodyLink id={item.id} />
             </tr>
         </tbody>
     );

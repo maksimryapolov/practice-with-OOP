@@ -154,12 +154,13 @@ class BoardsController extends BaseController
 
     public function getPages(Request $request, Response $response)
     {
-        $showCount = $request->getParam("show-count") ?? 2;
+        $showCount = $request->getParam("limit") ?? 2;
         $typeId = $request->getParam("activeType") ?? 1;
         $month = $request->getParam("month") ?? date("m");
         $year = $request->getParam("year") ?? date("Y");
 
         $allRow = (new Board())->getRowCount($year, $month, $typeId);
+
         $allPages = round($allRow / $showCount);
         return $response->withJson(["allPages" => $allPages]);
     }

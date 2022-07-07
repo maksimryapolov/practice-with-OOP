@@ -113,8 +113,9 @@ export const getCards = params => async dispatch => {
     }
 }
 
-export const getAllPages = (typeAction) => async dispath => {
-    const res = await board.getAllPages(typeAction);
+export const getAllPages = (params) => async dispath => {
+    const res = await board.getAllPages(params);
+
     if(res && res.allPages) {
         dispath(setAllPages(res.allPages));
     }

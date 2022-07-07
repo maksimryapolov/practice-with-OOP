@@ -11,6 +11,7 @@ import { setInitialData } from "./redux/redusers/appReducer";
 import RegisterContainer from "./Components/User/Register/RegisterContainer";
 import BoardsContainer from "./Components/Boards/BoardsContainer";
 import AddContainer from "./Components/Boards/Add/AddContainer";
+import {Update} from "./Components/Boards/Update/Update";
 
 function App({ loading, setInitialData }) {
     useEffect(() => {
@@ -29,8 +30,8 @@ function App({ loading, setInitialData }) {
                 <Route path="/boards" >
                     <Route index element={<BoardsContainer />} />
                     <Route path="add" element={<AddContainer />}/>
+                    <Route path=":id" element={<Update />} />
                 </Route>
-
                 <Route path="/users" element={<UsersContainer />} />
                 <Route path="/auth" element={<AuthContainer />} />
                 <Route path="/register" element={<RegisterContainer />} />

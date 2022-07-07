@@ -24,8 +24,10 @@ const BoardsContainer = ({
     }, []);
 
     useEffect(async () => {
-        await getAllPages(activeType);
-    }, [activeType])
+        const month = curDate.split('.')[0];
+        const year = curDate.split('.')[1];
+        await getAllPages({ month, year, activeType, limit: pagination.limit });
+    }, [activeType, curDate])
 
     useEffect(async () => {
         if(typesAction.length) {
@@ -33,11 +35,11 @@ const BoardsContainer = ({
         }
     }, [JSON.stringify(typesAction)]);
 
-    useEffect( () => {
+    useEffect( async () => {
         if(activeType > 0) {
             const month = curDate.split('.')[0];
             const year = curDate.split('.')[1];
-            getCards({ month, year, type: activeType, limit: pagination.limit, page: pagination.cur });
+            await getCards({ month, year, type: activeType, limit: pagination.limit, page: pagination.cur });
         }
     }, [activeType, curDate, pagination]);
 

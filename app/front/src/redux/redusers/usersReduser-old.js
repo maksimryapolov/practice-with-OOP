@@ -16,7 +16,7 @@ let initalState = {
     },
 };
 
-export let usersReduser = (state = initalState, action) => {
+export let usersReduserOld = (state = initalState, action) => {
     switch (action.type) {
         case SET_USERS_LIST:
             return {

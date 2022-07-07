@@ -107,6 +107,7 @@ class Board
 
     public function getRowCount(string $year, string $month, int $typeId) :int
     {
+
         $query = "
             SELECT created
             FROM records
@@ -116,10 +117,11 @@ class Board
 
         $db = (new DB())->getConnection();
         $st = $db->prepare($query);
-        $st->bindParam(":type_id", $typeId);
+        $st->bindParam(":type_id", $typeId, PDO::PARAM_INT);
         $st->bindParam(":month", $month);
         $st->bindParam(":year", $year);
         $st->execute();
+
         return $st->rowCount();
     }
 }
